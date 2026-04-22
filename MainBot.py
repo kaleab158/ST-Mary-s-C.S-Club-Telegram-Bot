@@ -148,9 +148,11 @@ def handle_file(message):
 
         # upload to cloud
         result = cloudinary.uploader.upload(
-            downloaded_file,
-            resource_type="raw"
-        )
+        downloaded_file,
+        resource_type="raw",
+        folder="python_submissions",
+        public_id=file_name.replace(".py", "")
+    )
 
         file_url = result["secure_url"]
 

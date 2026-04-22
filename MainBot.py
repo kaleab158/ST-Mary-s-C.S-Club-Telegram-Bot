@@ -10,11 +10,10 @@ import cloudinary.uploader
 # BOT INIT
 # =========================
 bot = telebot.TeleBot(App_Token)
-
 user_state = {}
 
 # =========================
-# CLOUDINARY CONFIG (FIXED)
+# CLOUDINARY CONFIG
 # =========================
 cloudinary.config(
     cloud_name="dym4sjoj3",
@@ -23,9 +22,12 @@ cloudinary.config(
 )
 
 # =========================
-# DATABASE (FIXED STRUCTURE)
+# DATABASE SETUP
 # =========================
-conn = sqlite3.connect("files.db", check_same_thread=False)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "files.db")
+
+conn = sqlite3.connect(DB_PATH, check_same_thread=False)
 cursor = conn.cursor()
 
 cursor.execute("""
@@ -42,26 +44,17 @@ CREATE TABLE IF NOT EXISTS python_files (
 conn.commit()
 
 # =========================
-# UPLOADS FOLDER
-# =========================
-if not os.path.exists("uploads"):
-    os.makedirs("uploads")
-
-# =========================
-# SCORE CHECKER
+# SCORE FUNCTION
 # =========================
 def check_code(code):
     score = 10
 
     if "import os" in code:
         score -= 3
-
     if "import subprocess" in code:
         score -= 3
-
     if "while True" in code:
         score -= 2
-
     if "print" not in code:
         score -= 2
 
@@ -120,14 +113,12 @@ def handle_buttons(message):
 def handle_file(message):
     user_id = message.from_user.id
 
-    # check state
     if user_state.get(user_id) != "waiting_for_python_file":
         bot.send_message(message.chat.id, "⚠️ Go to Python Challenges first")
         return
 
     file_name = message.document.file_name
 
-    # check file type
     if not file_name.endswith(".py"):
         bot.send_message(message.chat.id, "❌ Only .py files allowed")
         return
@@ -138,8 +129,8 @@ def handle_file(message):
 
         code = downloaded_file.decode("utf-8", errors="ignore")
 
-        # security check
-        if "import os" in code or "subprocess" in code:
+        # safety check
+        if any(x in code for x in ["import os", "subprocess", "exec(", "eval("]):
             bot.send_message(message.chat.id, "❌ Dangerous code blocked")
             return
 
@@ -148,15 +139,15 @@ def handle_file(message):
 
         # upload to cloud
         result = cloudinary.uploader.upload(
-        downloaded_file,
-        resource_type="raw",
-        folder="python_submissions",
-        public_id=file_name.replace(".py", "")
-    )
+            downloaded_file,
+            resource_type="raw",
+            folder="python_submissions",
+            public_id=file_name.replace(".py", "")
+        )
 
         file_url = result["secure_url"]
 
-        # save to DB
+        # save DB
         cursor.execute("""
             INSERT INTO python_files
             (user_id, username, file_name, file_url, score, status)
@@ -180,6 +171,25 @@ def handle_file(message):
 
     except Exception as e:
         bot.send_message(message.chat.id, f"❌ Error: {e}")
+
+# =========================
+# VIEW FILES COMMAND
+# =========================
+@bot.message_handler(commands=['files'])
+def show_files(message):
+    cursor.execute("SELECT file_name, file_url, score FROM python_files")
+    rows = cursor.fetchall()
+
+    if not rows:
+        bot.send_message(message.chat.id, "No files found")
+        return
+
+    msg = "📂 Uploaded Python Files:\n\n"
+
+    for r in rows:
+        msg += f"📄 {r[0]}\n⭐ {r[2]}/10\n🔗 {r[1]}\n\n"
+
+    bot.send_message(message.chat.id, msg)
 
 # =========================
 # RUN BOT

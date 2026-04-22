@@ -90,9 +90,9 @@ def start(message):
     )
 
 # =========================
-# BUTTON HANDLER
+# BUTTON HANDLER (FIXED)
 # =========================
-@bot.message_handler(func=lambda message: True)
+@bot.message_handler(func=lambda message: message.text and not message.text.startswith('/'))
 def handle_buttons(message):
     text = message.text
 
@@ -124,6 +124,7 @@ def handle_file(message):
         return
 
     try:
+        # download file
         file_info = bot.get_file(message.document.file_id)
         downloaded_file = bot.download_file(file_info.file_path)
 
@@ -147,7 +148,7 @@ def handle_file(message):
 
         file_url = result["secure_url"]
 
-        # save DB
+        # save to DB
         cursor.execute("""
             INSERT INTO python_files
             (user_id, username, file_name, file_url, score, status)
@@ -173,18 +174,23 @@ def handle_file(message):
         bot.send_message(message.chat.id, f"❌ Error: {e}")
 
 # =========================
-# VIEW FILES COMMAND
+# VIEW FILES COMMAND (FIXED)
 # =========================
 @bot.message_handler(commands=['files'])
 def show_files(message):
-    cursor.execute("SELECT file_name, file_url, score FROM python_files")
+    cursor.execute("""
+        SELECT file_name, file_url, score 
+        FROM python_files
+        WHERE user_id=?
+    """, (message.from_user.id,))
+
     rows = cursor.fetchall()
 
     if not rows:
-        bot.send_message(message.chat.id, "No files found")
+        bot.send_message(message.chat.id, "📂 No files found")
         return
 
-    msg = "📂 Uploaded Python Files:\n\n"
+    msg = "📂 Your Python Files:\n\n"
 
     for r in rows:
         msg += f"📄 {r[0]}\n⭐ {r[2]}/10\n🔗 {r[1]}\n\n"

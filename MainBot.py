@@ -1,20 +1,7 @@
 from config import App_Token
 import telebot
 from telebot.types import ReplyKeyboardMarkup
-import sqlite3
 import os
-import cloudinary
-import cloudinary.uploader
-import uuid
-
-# =========================
-# CLOUDINARY CONFIG
-# =========================
-cloudinary.config(
-    cloud_name="dym4sjoj3",
-    api_key="278575356368578",
-    api_secret="bJ8c367W1dvPf1gs--XQL3mVNgg"
-)
 
 # =========================
 # BOT INIT
@@ -22,25 +9,11 @@ cloudinary.config(
 bot = telebot.TeleBot(App_Token)
 user_state = {}
 
-# =========================
-# DATABASE
-# =========================
-conn = sqlite3.connect("files.db", check_same_thread=False)
-cursor = conn.cursor()
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS python_files (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    username TEXT,
-    file_name TEXT,
-    file_url TEXT
-)
-""")
-conn.commit()
+# 🔐 PUT YOUR TELEGRAM ID HERE
+ADMIN_ID = 123456789  # <-- replace with your real ID
 
 # =========================
-# BUTTONS
+# BUTTON TEXTS
 # =========================
 BTN_CHALLENGE = "🎖️ Coding Challenges"
 BTN_EVENTS = "📢 Upcoming Events"
@@ -84,12 +57,48 @@ def start(message):
     )
 
 # =========================
-# FILE HANDLER (FIXED)
+# BUTTON HANDLER
+# =========================
+@bot.message_handler(func=lambda message: message.text and not message.text.startswith('/'))
+def handler(message):
+    text = message.text
+
+    if text == BTN_CHALLENGE:
+        bot.send_message(message.chat.id, "🎯 Choose:", reply_markup=coding_menu())
+
+    elif text == BTN_EVENTS:
+        bot.send_message(message.chat.id, "📢 Events:\n- Hackathon\n- Workshop\n- Seminar")
+
+    elif text == BTN_JOBS:
+        bot.send_message(message.chat.id, "💼 Jobs:\n- Google Internship\n- Startups")
+
+    elif text == BTN_RESOURCES:
+        bot.send_message(message.chat.id, "📚 Resources:\n- CS50\n- Roadmaps.sh\n- FreeCodeCamp")
+
+    elif text == BTN_ABOUT:
+        bot.send_message(message.chat.id, "🏫 SMU CS Club\nWe help students grow in tech 🚀")
+
+    elif text == BTN_PYTHON:
+        user_state[message.from_user.id] = "waiting_for_python_file"
+        bot.send_message(message.chat.id, "🐍 Send your Python (.py) file now")
+
+    elif text == BTN_HACKATHON:
+        bot.send_message(message.chat.id, "🏆 Hackathon coming soon!")
+
+    elif text == BTN_CODEFORCES:
+        bot.send_message(message.chat.id, "⚔️ Codeforces coming soon!")
+
+    elif text == BTN_BACK:
+        bot.send_message(message.chat.id, "🔙 Back to main menu", reply_markup=main_menu())
+
+# =========================
+# FILE HANDLER (SEND TO YOUR INBOX)
 # =========================
 @bot.message_handler(content_types=['document'])
 def handle_file(message):
     user_id = message.from_user.id
 
+    # check state
     if user_state.get(user_id) != "waiting_for_python_file":
         bot.send_message(message.chat.id, "⚠️ Go to Python Challenges first")
         return
@@ -97,81 +106,26 @@ def handle_file(message):
     file_name = message.document.file_name
 
     if not file_name.endswith(".py"):
-        bot.send_message(message.chat.id, "❌ Only .py files allowed")
+        bot.send_message(message.chat.id, "❌ Only Python (.py) files allowed")
         return
 
-    temp_name = f"{uuid.uuid4()}_{file_name}"
-    local_path = os.path.join("uploads", temp_name)
-
     try:
-        # ensure folder exists
-        os.makedirs("uploads", exist_ok=True)
-
-        # download file
-        file_info = bot.get_file(message.document.file_id)
-        downloaded_file = bot.download_file(file_info.file_path)
-
-        with open(local_path, 'wb') as f:
-            f.write(downloaded_file)
-
-        # upload to cloud ☁️
-        upload_result = cloudinary.uploader.upload(
-            local_path,
-            resource_type="raw",
-            folder="python_submissions"
+        # 📩 SEND FILE DIRECTLY TO YOUR TELEGRAM INBOX
+        bot.send_document(
+            chat_id=ADMIN_ID,
+            document=message.document.file_id,
+            caption=f"📥 New Submission\n👤 User: {message.from_user.first_name}\n📄 File: {file_name}"
         )
 
-        file_url = upload_result["secure_url"]
+        bot.send_message(message.chat.id, "✅ File sent to admin inbox!")
 
-        # save DB
-        cursor.execute("""
-            INSERT INTO python_files (user_id, username, file_name, file_url)
-            VALUES (?, ?, ?, ?)
-        """, (
-            user_id,
-            message.from_user.first_name,
-            file_name,
-            file_url
-        ))
-        conn.commit()
-
-        bot.send_message(message.chat.id, f"✅ Uploaded to Cloud ☁️\n{file_url}")
+        user_state[user_id] = None
 
     except Exception as e:
         bot.send_message(message.chat.id, f"❌ Error: {e}")
 
-    finally:
-        # ALWAYS delete temp file
-        if os.path.exists(local_path):
-            os.remove(local_path)
-
-        user_state[user_id] = None
-
-# =========================
-# BUTTON HANDLER
-# =========================
-@bot.message_handler(func=lambda message: True)
-def handler(message):
-    text = message.text
-
-    if text == BTN_CHALLENGE:
-        bot.send_message(message.chat.id, "Choose:", reply_markup=coding_menu())
-
-    elif text == BTN_PYTHON:
-        user_state[message.from_user.id] = "waiting_for_python_file"
-        bot.send_message(message.chat.id, "📂 Send your Python file now")
-
-    elif text == BTN_EVENTS:
-        bot.send_message(message.chat.id, "📢 Events coming soon")
-
-    elif text == BTN_BACK:
-        bot.send_message(message.chat.id, "🔙 Main menu", reply_markup=main_menu())
-
-    else:
-        bot.send_message(message.chat.id, "❓ Unknown command")
-
 # =========================
 # RUN BOT
 # =========================
-print("Bot running...")
+print("Bot is running...")
 bot.infinity_polling(skip_pending=True)

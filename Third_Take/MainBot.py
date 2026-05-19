@@ -10,7 +10,7 @@ bot = telebot.TeleBot(App_Token)
 user_state = {}
 
 # 🔐 PUT YOUR TELEGRAM ID HERE
-ADMIN_ID = 782362392  # <-- replace with your real ID
+ADMIN_ID = 782362392  # <-- replace with your real ID And Also Use It To Sent To Admins.
 
 # =========================
 # BUTTON TEXTS

@@ -284,7 +284,7 @@ def handle_file(message):
                     document=message.document.file_id,
                     caption=
                     f"📥 New Submission\n\n"
-                    f"🏅 Submission Rank: #{rank}\n"
+                
                     f"👤 Name: {message.from_user.first_name}\n"
                     f"🆔 Username: @{message.from_user.username}\n"
                     f"📄 File: {file_name}\n"

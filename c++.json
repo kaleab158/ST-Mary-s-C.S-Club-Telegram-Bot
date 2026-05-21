@@ -1,0 +1,44 @@
+{
+  "title": "C++ Quiz",
+  "questions": [
+    "21. Look at this variable definition trap. What does this declare?\n#include <iostream>\nstruct Widget {\n    Widget() { std::cout << \"Created\"; }\n};\nint main() {\n    Widget w();\n}\nA) Prints \"Created\"\nB) Declares a function named w that returns a Widget.\nC) Compilation error due to invalid brackets.\nD) Undefined Behavior.",
+
+    "22. What happens when you use post-increment vs pre-increment inside a loop evaluation?\nint i = 0;\nwhile(i++ < 3) {\n    std::cout << i;\n}\nA) 012\nB) 123\nC) 1234\nD) 0123",
+
+    "23. Polymorphism in C++ has conditions. What does this code print?\nstruct Base {\n    void print() { std::cout << \"Base\"; }\n};\nstruct Derived : Base {\n    void print() { std::cout << \"Derived\"; }\n};\nint main() {\n    Base* b = new Derived();\n    b->print();\n    delete b;\n}\nA) Base\nB) Derived\nC) Compile error\nD) Runtime crash",
+
+    "24. What is the value of sizeof('a') in C++?\nA) Always 1\nB) Same as sizeof(int) (which might be 4)\nC) Depends on character encoding (can be 2)\nD) Compiler-dependent value without specifications",
+
+    "25. Watch out for order of evaluation quirks:\nint a = 1;\na = a++ + ++a;\nstd::cout << a;\nA) 4\nB) 5\nC) Undefined/Unspecified Behavior\nD) 3",
+
+    "26. Destructors and polymorphism require care. What is the issue here?\nstruct B { ~B() {} };\nstruct D : B { ~D() { std::cout << \"Destroyed\"; } };\nint main() {\n    B* ptr = new D();\n    delete ptr;\n}\nA) Prints \"Destroyed\" safely\nB) Compilation Error\nC) Undefined behavior because destructor is not virtual\nD) Memory leak, but perfectly defined behavior",
+
+    "27. What is the output of this unsigned wrap-around statement?\nunsigned int x = 0;\nx--;\nstd::cout << (x > -1);\nA) 0 (False)\nB) 1 (True)\nC) Compile error due to negative value comparison\nD) Undefined Behavior",
+
+    "28. Array references can look bizarre. What is printed?\nint arr[] = {10, 20, 30};\nstd::cout << 2[arr];\nA) Compile Error\nB) Memory Address\nC) 30\nD) Undefined Behavior",
+
+    "29. Vector reallocations invalidate iterators. What happens here?\n#include <vector>\nstd::vector<int> v = {1};\nauto it = v.begin();\nv.push_back(2);\nstd::cout << *it;\nA) 1\nB) 2\nC) Undefined Behavior\nD) Segmentation fault safely aborted by compiler",
+
+    "30. Logical operators bypass evaluations via short-circuiting:\nint x = 0;\nif (x == 0 || ++x) {\n    x += 10;\n}\nstd::cout << x;\nA) 10\nB) 11\nC) 0\nD) 12",
+
+    "31. What is the output of this ternary operator type match challenge?\nstd::cout << (true ? 1 : 2.0);\nA) Prints integer 1\nB) Prints floating point 1.0\nC) Compilation Error due to conflicting return types\nD) Undefined evaluation",
+
+    "32. C++ structures have alignment rules. What is the minimum size of this struct on a common 64-bit system?\nstruct Trick {\n    char a;\n    int b;\n    char c;\n};\nA) 6\nB) 8\nC) 12\nD) 16",
+
+    "33. Default function parameters are bound statically. What happens here?\nstruct B {\n    virtual void f(int x = 1) { std::cout << \"B\" << x; }\n};\nstruct D : B {\n    void f(int x = 2) override { std::cout << \"D\" << x; }\n};\nint main() {\n    B* b = new D();\n    b->f();\n    delete b;\n}\nA) B1\nB) D2\nC) D1\nD) B2",
+
+    "34. Macro definitions substitute text directly. What is the value of result?\n#define MULTIPLY(a, b) a * b\nint result = MULTIPLY(2 + 3, 4);\nA) 20\nB) 14\nC) 24\nD) Compile Error",
+
+    "35. Constant pointers vs pointers to constants. Which of the lines will fail compile?\nint x = 5;\nconst int* ptr1 = &x;\nint* const ptr2 = &x;\n// Line 1: *ptr1 = 10;\n// Line 2: ptr2 = &x;\nA) Line 1 only\nB) Line 2 only\nC) Both Line 1 and Line 2\nD) Neither, both lines are completely valid",
+
+    "36. What is the risk or output of using an initialized constant reference?\nconst int& ref = 42;\nstd::cout << ref;\nA) Compile error: cannot bind non-const reference to temporary\nB) Undefined behavior because 42 is destroyed immediately\nC) Perfectly valid, prints 42 (extends lifetime)\nD) Prints memory address of the temporary constant",
+
+    "37. Lambda captures can hold references. What value is printed?\nint x = 10;\nauto lambda = [x]() mutable { x += 5; return x; };\nlambda();\nstd::cout << x;\nA) 10\nB) 15\nC) Compile Error: mutable is invalid on lambda without params\nD) 0",
+
+    "38. Signed overflow is a major trap in C++. What is the result?\nint max_int = 2147483647;\nstd::cout << (max_int + 1 < max_int);\nA) Outputs 1 (True)\nB) Outputs 0 (False)\nC) Undefined Behavior\nD) Compile Error",
+
+    "39. What happens when you use string literals in pointer comparisons?\nconst char* p1 = \"hello\";\nconst char* p2 = \"hello\";\nstd::cout << (p1 == p2);\nA) Always 1 (True)\nB) Always 0 (False)\nC) Implementation-defined (Depends on string pooling)\nD) Compile Error",
+
+    "40. What does this declaration do in modern C++?\nint a{};\nstd::cout << a;\nA) Prints garbage value because it's uninitialized\nB) Prints 0 due to value-initialization\nC) Compilation Error\nD) Throws a runtime initialization exception"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "title": "C# Quiz",
+  "questions": [
+    "41. C# Structs are value types. What does this console script display?\nstruct Point { public int X; }\nstatic void Main() { Point p = new Point { X = 5 }; object obj = p; ((Point)obj).X = 10; Console.WriteLine(p.X + \" \" + ((Point)obj).X); }\nA) 5 10\nB) 10 10\nC) 5 5\nD) Compile Error",
+
+    "42. String interning handles references uniquely. What is printed?\nstring s1 = \"hello\";\nstring s2 = new string(new char[] {'h','e','l','l','o'});\nConsole.WriteLine((object)s1 == (object)s2);\nA) True\nB) False\nC) Compile Error\nD) NullReferenceException",
+
+    "43. Delegates have interesting capturing mechanisms. What gets written to output?\nvar actions = new List<Action>();\nfor (int i = 0; i < 3; i++) { actions.Add(() => Console.Write(i)); }\nforeach (var a in actions) a();\nA) 012\nB) 333\nC) 222\nD) 000",
+
+    "44. In C#, how does a structural float evaluation compare to a double?\nfloat f = 0.1f; double d = 0.1;\nConsole.WriteLine(f == d);\nA) True\nB) False\nC) Compile Error\nD) Throws precision mismatch exception",
+
+    "45. Method hiding using new vs overriding. What prints here?\nclass Parent { public void Show() => Console.Write(\"Parent\"); }\nclass Child : Parent { public new void Show() => Console.Write(\"Child\"); }\nParent p = new Child(); p.Show();\nA) Parent\nB) Child\nC) Compile Error\nD) Throws RuntimeBindException",
+
+    "46. What happens if you add items to a collection while iterating through it with LINQ?\nvar list = new List<int> { 1, 2 };\nvar query = list.Where(x => x > 0);\nlist.Add(3);\nConsole.WriteLine(query.Count());\nA) 2\nB) 3\nC) InvalidOperationException due to modification\nD) Compile Error",
+
+    "47. Nullable value types can be tricky. What does this output?\nint? a = null; int? b = null;\nConsole.WriteLine(a == b);\nConsole.WriteLine(a > b);\nA) True then False\nB) False then False\nC) True then True\nD) Throws NullReferenceException",
+
+    "48. What is the evaluation of this string null conditional assignment?\nstring s = null;\nConsole.WriteLine(s?.Length ?? -1);\nA) NullReferenceException\nB) -1\nC) 0\nD) Compile Error",
+
+    "49. Examine this integer boundary behavior inside checked scopes:\nint val = int.MaxValue;\nint result = 0;\ntry { result = val + 1; } catch (OverflowException) { result = -1; }\nConsole.WriteLine(result);\nA) -1\nB) -2147483648\nC) Compile Error\nD) 0",
+
+    "50. Let's see how C# deals with implicit conversion evaluations on conditional ternary expressions:\nvar result = true ? 10 : (int?)null;\nConsole.WriteLine(result.GetType());\nA) System.Int32\nB) System.Nullable`1[System.Int32]\nC) Compile Error\nD) Runtime Exception",
+
+    "51. What happens when an exception is rethrown via throw ex;?\ntry { throw new InvalidOperationException(\"Error\"); } catch (Exception ex) { throw ex; }\nA) Maintains original stack trace fully\nB) Wipes out original stack trace and resets it\nC) Compile error\nD) Crash",
+
+    "52. Array covariance can be treacherous. What occurs during execution?\nstring[] strs = new string[] { \"hello\" };\nobject[] objs = strs;\nobjs[0] = 123;\nA) Works\nB) Compile error\nC) Runtime ArrayTypeMismatchException\nD) Silent corruption",
+
+    "53. C# const vs readonly field bindings. What is true?\nA) Both runtime\nB) const compile-time, readonly runtime\nC) same\nD) error",
+
+    "54. Watch out for passing arguments by reference. What does this code print?\nvoid Square(ref int x) { x = x * x; }\nint val = 5;\nSquare(ref val);\nConsole.WriteLine(val);\nA) 5\nB) 25\nC) Compile error\nD) 0",
+
+    "55. What is the value of val after using a logical pattern match statement?\nobject o = \"123\";\nif (o is string s && s.Length > 2) { Console.WriteLine(\"Match\"); }\nA) Match\nB) Error\nC) Crash\nD) False",
+
+    "56. What does this bitwise shift operations produce?\nint value = -1;\nConsole.WriteLine(value >> 1);\nA) 2147483647\nB) -1\nC) 0\nD) Error",
+
+    "57. C# async methods that return void instead of Task have what trait?\nA) safe\nB) fire-and-forget\nC) sync\nD) error",
+
+    "58. How does the default literal look on reference types vs integers?\nstring s = default; int i = default;\nConsole.WriteLine((s == null) + \" \" + (i == 0));\nA) True True\nB) False False\nC) Error\nD) True False",
+
+    "59. Structs with parameterized constructors. What does parameterless init do?\nstruct Custom { public int Age; public Custom(int age) { Age = age; } }\nCustom c = new Custom();\nConsole.WriteLine(c.Age);\nA) Error\nB) 0\nC) Crash\nD) garbage",
+
+    "60. What is the behavior of explicit boolean cast conversions with dynamic types?\ndynamic d = \"true\";\nbool b = (bool)d;\nA) true\nB) false\nC) Runtime exception\nD) error"
+  ]
+}

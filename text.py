@@ -1,67 +1,47 @@
 from config import App_Token
 import telebot
-from telebot.types import ReplyKeyboardMarkup
-import os
-import json
+from telebot.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 from datetime import datetime
 import pytz
+import json
+import os
 
-# =========================
-# BOT INIT
-# =========================
 bot = telebot.TeleBot(App_Token)
-user_state = {}
 
 # =========================
-# USERS JSON
+# STATES
+# =========================
+user_state = {}
+quiz_progress = {}
+quiz_mode = {}
+
+# =========================
+# USERS
 # =========================
 USERS_FILE = "users.json"
 
 def load_users():
+    if not os.path.exists(USERS_FILE):
+        return []
     try:
-        with open(USERS_FILE, "r") as file:
-            return set(json.load(file))
+        with open(USERS_FILE, "r") as f:
+            return json.load(f)
     except:
-        return set()
+        return []
 
 def save_users(users):
-    with open(USERS_FILE, "w") as file:
-        json.dump(list(users), file)
+    with open(USERS_FILE, "w") as f:
+        json.dump(users, f)
 
 users = load_users()
 
 # =========================
-# SUBMISSION COUNTER
+# ADMINS
 # =========================
-COUNT_FILE = "submission_count.txt"
-
-def load_count():
-    try:
-        with open(COUNT_FILE, "r") as file:
-            return int(file.read())
-    except:
-        return 0
-
-def save_count(count):
-    with open(COUNT_FILE, "w") as file:
-        file.write(str(count))
-
-submission_count = load_count()
+ADMIN_IDS = [782362392, 5511982710, 1259171903]
 
 # =========================
-# ADMIN IDS
-# =========================
-ADMIN_IDS = [
-    # me
-    782362392,
-# pr
-    5511982710,
-# bm
-    1259171903
-]
-
-# =========================
-# BUTTON TEXTS
+# BUTTONS
 # =========================
 BTN_CHALLENGE = "🎖️ Coding Challenges"
 BTN_EVENTS = "📢 Upcoming Events"
@@ -69,13 +49,24 @@ BTN_JOBS = "💼 Internships & Job Alerts"
 BTN_RESOURCES = "📚 Learning Resources & Roadmaps"
 BTN_ABOUT = "About Us"
 
-BTN_PYTHON = "🐍 Python Challenges"
-BTN_HACKATHON = "🏆 Hackathon"
-BTN_CODEFORCES = "⚔️ Codeforces"
+BTN_PYTHON = "🐍 Python Quiz"
+BTN_CPP = "💻 C++ Quiz"
+BTN_CSHARP = "⚙️ C# Quiz"
 BTN_BACK = "🔙 Back"
 
 # =========================
-# KEYBOARDS
+# LOAD JSON QUESTIONS
+# =========================
+def load_questions(file):
+    with open(file, "r", encoding="utf-8") as f:
+        return json.load(f)["questions"]
+
+python_questions = load_questions("python.json")
+cpp_questions = load_questions("c++.json")
+csharp_questions = load_questions("c#.json")
+
+# =========================
+# MENUS
 # =========================
 def main_menu():
     kb = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -86,235 +77,158 @@ def main_menu():
     kb.row(BTN_ABOUT)
     return kb
 
-def coding_menu():
+def challenge_menu():
     kb = ReplyKeyboardMarkup(resize_keyboard=True)
-    kb.row(BTN_PYTHON, BTN_HACKATHON)
-    kb.row(BTN_CODEFORCES)
+    kb.row(BTN_PYTHON, BTN_CPP, BTN_CSHARP)
     kb.row(BTN_BACK)
     return kb
 
 # =========================
-# START
+# START QUIZ
 # =========================
-@bot.message_handler(commands=['start'])
-def start(message):
+def start_quiz(uid, chat_id, mode):
+    quiz_progress[uid] = {"index": 0, "answers": {}}
+    quiz_mode[uid] = mode
+    send_question(chat_id, uid)
 
-    # save users
-    users.add(message.chat.id)
-    save_users(users)
+# =========================
+# SEND QUESTION
+# =========================
+def send_question(chat_id, uid):
+
+    index = quiz_progress[uid]["index"]
+    mode = quiz_mode.get(uid)
+
+    if mode == "python":
+        qlist = python_questions
+    elif mode == "cpp":
+        qlist = cpp_questions
+    else:
+        qlist = csharp_questions
+
+    if index >= len(qlist):
+        return finish_quiz(chat_id, uid)
+
+    q = qlist[index]
+
+    markup = InlineKeyboardMarkup()
+
+    # last 4 options assumed A-D
+    lines = q.split("\n")
+    options = [l for l in lines if l.strip().startswith(("A)", "B)", "C)", "D)"))]
+
+    for opt in options:
+        markup.add(InlineKeyboardButton(opt, callback_data=f"ans_{opt[0]}"))
 
     bot.send_message(
-        message.chat.id,
-        f"👋 Hello {message.from_user.first_name}\nWelcome to SMU CS Club Bot 🚀",
-        reply_markup=main_menu()
+        chat_id,
+        f"🧠 Question {index+1}/{len(qlist)}\n\n{q}",
+        reply_markup=markup
     )
 
 # =========================
-# BROADCAST
+# FINISH QUIZ
 # =========================
-@bot.message_handler(commands=['broadcast'])
-def broadcast(message):
+def finish_quiz(chat_id, uid):
 
-    # admin check
-    if message.from_user.id not in ADMIN_IDS:
-        bot.reply_to(message, "❌ You are not authorized")
-        return
+    answers = quiz_progress[uid]["answers"]
 
-    # get message
-    msg = message.text.replace('/broadcast', '').strip()
+    ethiopia = pytz.timezone("Africa/Addis_Ababa")
+    now = datetime.now(ethiopia)
 
-    if not msg:
-        bot.reply_to(message, "⚠️ Usage:\n/broadcast your message")
-        return
+    date = now.strftime("%Y-%m-%d")
+    time = now.strftime("%I:%M %p")
 
-    success = 0
-    failed = 0
+    user = bot.get_chat(uid)
 
-    for user_id in users:
+    text = ""
+    for i, a in answers.items():
+        text += f"{i+1}: {a}\n"
 
+    for admin in ADMIN_IDS:
         try:
-            bot.send_message(
-                user_id,
-                f"📢 SMU CS CLUB ANNOUNCEMENT\n\n{msg}"
-            )
-            success += 1
+            bot.send_message(admin,
+f"""
+🧠 QUIZ SUBMISSION
 
+👤 Name: {user.first_name}
+🆔 @{user.username}
+
+📅 {date}
+⏰ {time}
+
+ANSWERS:
+{text}
+""")
         except:
-            failed += 1
+            pass
 
-    bot.reply_to(
-        message,
-        f"✅ Broadcast Complete\n\n✔ Sent: {success}\n❌ Failed: {failed}"
-    )
+    bot.send_message(chat_id, "✅ Quiz completed!")
+    del quiz_progress[uid]
+    del quiz_mode[uid]
 
 # =========================
-# RESET COUNTER
+# CALLBACK ANSWERS
 # =========================
-@bot.message_handler(commands=['resetcount'])
-def reset_count(message):
+@bot.callback_query_handler(func=lambda call: True)
+def callback(call):
 
-    global submission_count
+    uid = call.from_user.id
 
-    # admin check
-    if message.from_user.id not in ADMIN_IDS:
-        bot.reply_to(message, "❌ You are not authorized")
+    if uid not in quiz_progress:
         return
 
-    submission_count = 0
-    save_count(submission_count)
+    data = call.data
 
-    bot.reply_to(message, "✅ Submission counter reset")
+    if data.startswith("ans_"):
+
+        ans = data.split("_")[1]
+
+        index = quiz_progress[uid]["index"]
+        quiz_progress[uid]["answers"][index] = ans
+        quiz_progress[uid]["index"] += 1
+
+        bot.answer_callback_query(call.id, f"Selected {ans}")
+        send_question(call.message.chat.id, uid)
 
 # =========================
-# BUTTON HANDLER
+# MESSAGE HANDLER
 # =========================
-@bot.message_handler(func=lambda message: message.text and not message.text.startswith('/'))
+@bot.message_handler(func=lambda m: True)
 def handler(message):
 
+    uid = message.from_user.id
     text = message.text
 
     if text == BTN_CHALLENGE:
-        bot.send_message(
-            message.chat.id,
-            "🎯 Choose:",
-            reply_markup=coding_menu()
-        )
-
-    elif text == BTN_EVENTS:
-        bot.send_message(
-            message.chat.id,
-            "📢 Events:\n- Hackathon\n- Workshop\n- Seminar"
-        )
-
-    elif text == BTN_JOBS:
-        bot.send_message(
-            message.chat.id,
-            "💼 Jobs:\n- Google Internship\n- Startups"
-        )
-
-    elif text == BTN_RESOURCES:
-        bot.send_message(
-            message.chat.id,
-            "📚 Resources:\n- CS50\n- Roadmaps.sh\n- FreeCodeCamp"
-        )
-
-    elif text == BTN_ABOUT:
-        bot.send_message(
-            message.chat.id,
-            "🏫 SMU CS Club\nWe help students grow in tech 🚀"
-        )
+        bot.send_message(message.chat.id, "🎯 Choose:", reply_markup=challenge_menu())
 
     elif text == BTN_PYTHON:
-        user_state[message.from_user.id] = "waiting_for_python_file"
+        start_quiz(uid, message.chat.id, "python")
 
-        bot.send_message(
-            message.chat.id,
-            "🐍 Send your Python (.py) file now"
-        )
+    elif text == BTN_CPP:
+        start_quiz(uid, message.chat.id, "cpp")
 
-    elif text == BTN_HACKATHON:
-        bot.send_message(
-            message.chat.id,
-            "🏆 Hackathon coming soon!"
-        )
+    elif text == BTN_CSHARP:
+        start_quiz(uid, message.chat.id, "csharp")
 
-    elif text == BTN_CODEFORCES:
-        bot.send_message(
-            message.chat.id,
-            "⚔️ Codeforces coming soon!"
-        )
+    elif text == BTN_EVENTS:
+        bot.send_message(message.chat.id, "📢 Events:\nHackathon\nWorkshop")
+
+    elif text == BTN_JOBS:
+        bot.send_message(message.chat.id, "💼 Jobs:\nInternships available")
+
+    elif text == BTN_RESOURCES:
+        bot.send_message(message.chat.id, "📚 CS50, FreeCodeCamp")
+
+    elif text == BTN_ABOUT:
+        bot.send_message(message.chat.id, "🏫 SMU Bot")
 
     elif text == BTN_BACK:
-        bot.send_message(
-            message.chat.id,
-            "🔙 Back to main menu",
-            reply_markup=main_menu()
-        )
-
-# =========================
-# FILE HANDLER
-# =========================
-@bot.message_handler(content_types=['document'])
-def handle_file(message):
-
-    global submission_count
-
-    user_id = message.from_user.id
-
-    # state check
-    if user_state.get(user_id) != "waiting_for_python_file":
-        bot.send_message(
-            message.chat.id,
-            "⚠️ Go to Python Challenges first"
-        )
-        return
-
-    file_name = message.document.file_name
-
-    # file check
-    if not file_name.endswith(".py"):
-        bot.send_message(
-            message.chat.id,
-            "❌ Only Python (.py) files allowed"
-        )
-        return
-
-    try:
-
-        # increase rank
-        submission_count += 1
-        save_count(submission_count)
-
-        rank = submission_count
-
-        # Ethiopia timezone
-        ethiopia_tz = pytz.timezone("Africa/Addis_Ababa")
-        now = datetime.now(ethiopia_tz)
-
-        date_now = now.strftime("%Y-%m-%d")
-        time_now = now.strftime("%I:%M %p")
-
-        # send to admins
-        for admin_id in ADMIN_IDS:
-
-            try:
-
-                bot.send_document(
-                    chat_id=admin_id,
-                    document=message.document.file_id,
-                    caption=
-                    f"📥 New Submission\n\n"
-                
-                    f"👤 Name: {message.from_user.first_name}\n"
-                    f"🆔 Username: @{message.from_user.username}\n"
-                    f"📄 File: {file_name}\n"
-                    f"📅 Date: {date_now}\n"
-                    f"⏰ Time: {time_now}"
-                )
-
-            except Exception as e:
-                print(f"Failed to send to {admin_id}: {e}")
-
-        bot.send_message(
-            message.chat.id,
-            f"✅ File submitted successfully! \n"
-        )
-
-        user_state[user_id] = None
-
-    except Exception as e:
-
-        bot.send_message(
-            message.chat.id,
-            f"❌ Error: {e}"
-        )
+        bot.send_message(message.chat.id, "🔙 Main Menu", reply_markup=main_menu())
 
 # =========================
 # RUN BOT
 # =========================
-print("Bot is running...")
-bot.infinity_polling(skip_pending=True)
-
-"""Kaleab ID 5511982710     
-    B 1259171903
-"""
+print("Bot running...")
+bot.infinity_polling()

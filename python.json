@@ -1,0 +1,44 @@
+{
+  "title": "Python Quiz",
+  "questions": [
+    "1. What will be the final state or output of this list multiplication loop?\n\nboxes = [[]] * 3\nboxes[0].append(\"Surprise!\")\nprint(boxes)\nA) [['Surprise!'], [], apply []]\nB) [['Surprise!'], ['Surprise!'], ['Surprise!']]\nC) IndexError: list index out of range\nD) [['Surprise!']]",
+
+    "2.  Look closely at this basic default argument execution. What is printed on the second call? \n def add_item(val, items=[]):\n    items.append(val)\n    return items\n\nadd_item(1)\nprint(add_item(2))\nA) [2]\nB) [1, 2]\nC) TypeError: items is immutable\nD) [1, [2]]",
+
+    "3. . Python boasts clear syntax. What does this chained evaluation evaluate to?\nprint(False == False in [False])\nA) True\nB) False\nC) SyntaxError\nD) TypeError",
+
+    "4. What is the value of x after this boolean logic assignment executes?\n x = True or False and False\nA) True\nB) False\nC) None\nD) SyntaxError",
+
+    "5. . Python values readability. What does this code print\n a = 256; b = 256\nc = 257; d = 257\nprint(a is b, c is d)\nA) True True\nB) True False\nC) False False\nD) False True",
+
+    "6. Let's look at variable scoping in closures. What will this print\nfuncs = [lambda: i for i in range(3)]\nprint([f() for f in funcs])\nA) [0, 1, 2]\nB) [3, 3, 3]\nC) [2, 2, 2]\nD) [None, None, None]",
+
+    "7. What is the output when summing up an empty list with a starting value\n print(sum([[], []], [1, 2]))\nA) [1, 2]\nB) [1, 2, [], []]\nC) TypeError\nD) [1, 2] flat only",
+
+    "8. Can you guess what happens with this math round-off strategy\nprint(round(2.5), round(3.5))\nA) 3 4\nB) 2 4\nC) 2 3\nD) 3 3",
+
+    "9 Dictionary keys can be sneaky. What is the length of this dictionary\n data = {1:'a', 1.0:'b', True:'c'}\nprint(len(data))\nA) 1\nB) 2\nC) 3\nD) TypeError",
+
+    "10.  Think about string manipulations. What does this return?\n print(\"Python\".strip(\"Py\"))\nA) thon\nB) removes only substring \"Py\"\nC) behaves differently depending on string order\nD) strips characters 'P' and 'y' from ends",
+
+    "11.  What happens when a finally block pulls a fast one?\n def trick():\n    try:\n        return \"Try\"\n    finally:\n        return \"Finally\"\nprint(trick())\nA) Try\nB) Finally\nC) Try Finally\nD) SyntaxError",
+
+    "12.  What happens if we try to modify a tuple nested with a list?\n tup = ([], 1)\ntup[0] += [1, 2]\nA) Error caught, ([], 1)\nB) Error caught, ([1,2], 1)\nC) No error, ([1,2], 1)\nD) Crash",
+
+    "13. Let's see how boolean sub-classing of integers behaves in Python\n print(isinstance(True, int), True + True)\nA) False 2\nB) True 2\nC) True True\nD) TypeError",
+
+    "14.  What happens when you combine string formatting with single-element tuples\n print(\"%s\" % (1, 2))\nA) 1\nB) (1, 2)\nC) TypeError\nD) 1 2",
+
+    "15.  What is the value of x after running this expression?\nx = [1, 2, 3]\nx.append(x)\nprint(len(x))\nA) 4\nB) Infinite\nC) 3\nD) RecursionError",
+
+    "16.  What does this piece of list slice assignment result in?\n nums = [1, 2, 3, 4]\nnums[1:3] = []\nprint(nums)\nA) [1, 4]\nB) [1, [], [], 4]\nC) [1, None, 4]\nD) TypeError",
+
+    "17.  Notice this unusual placement of an else block:\n for i in range(2):\n    print(i, end=\" \")\nelse:\n    print(\"Done\")\nA) 0 1\nB) 0 1 Done\nC) Done\nD) SyntaxError",
+
+    "18.  Python integers can be initialized with leading underscores. What about leading zeros?\nx = 010\nA) 10\nB) 8\nC) SyntaxError\nD) 0",
+
+    "19. Check out this dynamic type alteration via class mutation\n class A: pass\nclass B: pass\na = A()\na.__class__ = B\nA) True False\nB) False True\nC) True True\nD) TypeError",
+
+    "20. What is the value of a\nall([]), any([])\nA) True True\nB) False False\nC) True False\nD) False True"
+  ]
+}

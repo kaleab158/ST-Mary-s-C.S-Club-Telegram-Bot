@@ -114,7 +114,6 @@ def safe_html(text):
             .replace("<", "&lt;")
             .replace(">", "&gt;")
     )
-
 # =========================
 # SEND QUESTION
 # =========================
@@ -138,34 +137,22 @@ def send_question(chat_id, uid):
     q = qlist[index]
 
     if mode == "quotes":
+        bot.send_message(
+            chat_id,
+            f"""🧠 Quote Challenge {index+1}/{len(qlist)}
 
-     title = safe_html(q['title'])
-    quote = safe_html(q['quote'])
-    insp = safe_html(q['inspiration'])
-    lang = safe_html(q['language'])
-    question = safe_html(q['question'])
+🏷 Title: {q['title']}
+💬 Quote: {q['quote']}
+🎬 Inspiration: {q['inspiration']}
+💻 Language: {q['language']}
 
-    bot.send_message(
-        chat_id,
-        f"""🧠 <b>Quote Challenge {index+1}/{len(qlist)}</b>
+❓ Task:
+{q['question']}
+"""
+        )
 
-🏷 <b>Title:</b> {title}
-💬 <b>Quote:</b> {quote}
-🎬 <b>Inspiration:</b> {insp}
-💻 <b>Language:</b> {lang}
-
-❓ <b>Task:</b>
-
-<pre>{question}</pre>
-
-📤 <b>Please upload your file to continue...</b>
-""",
-        parse_mode="HTML"
-    )
-
-    user_state[uid] = "quotes_upload"
-
-    return
+        quiz_progress[uid]["index"] += 1
+        return
 
     markup = InlineKeyboardMarkup()
 
@@ -285,9 +272,22 @@ def file_handler(message):
 
     uid = message.from_user.id
 
-    if user_state.get(uid) not in ["quotes_upload", "quotes_final_upload"]:
-        bot.send_message(message.chat.id, "⚠️ Not in Quotes submission mode.")
-        return
+    for admin in ADMIN_IDS:
+        try:
+            bot.send_document(
+                admin,
+                message.document.file_id,
+                caption=f"""
+📁 FILE RECEIVED
+
+👤 {message.from_user.first_name}
+🆔 @{message.from_user.username}
+"""
+            )
+        except:
+            pass
+
+    bot.send_message(message.chat.id, "✅ File received successfully!")
 
     ethiopia = pytz.timezone("Africa/Addis_Ababa")
     now = datetime.now(ethiopia)
@@ -295,14 +295,13 @@ def file_handler(message):
     date = now.strftime("%Y-%m-%d")
     time = now.strftime("%I:%M %p")
 
-    # send to admins
     for admin in ADMIN_IDS:
         try:
             bot.send_document(
                 admin,
                 message.document.file_id,
                 caption=f"""
-📝 QUOTE CHALLENGE SUBMISSION
+📝 QUOTES CODING SUBMISSION
 
 👤 {message.from_user.first_name}
 🆔 @{message.from_user.username}
@@ -314,34 +313,9 @@ def file_handler(message):
         except:
             pass
 
-    bot.send_message(message.chat.id, "✅ File received! Next question loading...")
+    bot.send_message(message.chat.id, "✅ File submitted successfully!")
+    user_state[uid] = None
 
-    # STEP 1: clear upload state
-    user_state.pop(uid, None)
-
-    # STEP 2: move to next question (ONLY ONCE)
-    quiz_progress[uid]["index"] += 1
-
-    # STEP 3: check if finished
-    if quiz_progress[uid]["index"] >= len(quotes_questions):
-        bot.send_message(message.chat.id, "🎉 Quote Challenge Completed!")
-        finish_quiz(message.chat.id, uid)
-        return
-
-    # STEP 4: send next question
-    send_question(message.chat.id, uid)
-    # next step
-    
-
-# if finished ALL questions → STOP EVERYTHING
-    if quiz_progress[uid]["index"] >= len(quotes_questions):
-     user_state.pop(uid, None)
-    bot.send_message(message.chat.id, "🎉 Quote Challenge Completed! No more uploads required.")
-    finish_quiz(message.chat.id, uid)
-    return
-
-# otherwise continue
-# send_question(message.chat.id, uid)
 # =========================
 # MESSAGE HANDLER
 # =========================
@@ -417,7 +391,32 @@ def handler(message):
         bot.send_message(message.chat.id, "📚 Resources")
 
     elif text == BTN_ABOUT:
-        bot.send_message(message.chat.id, "🏫 About Bot")
+     bot.send_message(
+        message.chat.id,
+        """🤖 About SMU C.S Club Bot
+
+Welcome to the SMU C.S Club Bot 🚀
+
+This bot is designed to help students improve their programming skills through interactive quizzes and coding challenges 💻✨
+
+🎯 What You Can Do:
+• 🐍 Python Coding Challenges  
+• 💻 C++ Programming Quizzes  
+• ⚙️ C# Practice Tests  
+• 📝 Quote-Based Coding Challenges  
+• 📤 Submit Your Solutions  
+
+📚 Extra Features:
+• 📢 Latest Tech Events  
+• 💼 Internship & Job Alerts  
+• 📖 Learning Resources & Roadmaps  
+
+🔥 Our Mission:
+To build strong developers through practice, learning, and real coding experience 👨‍💻👩‍💻
+
+💡 Keep learning, keep coding, keep growing!
+"""
+    )
 
     elif text == BTN_BACK:
         bot.send_message(message.chat.id, "🔙 Main Menu", reply_markup=main_menu())
@@ -486,16 +485,10 @@ def broadcast(message):
             bot.send_message(u["user_id"], f"📢 :\n\n{text}")
             count += 1
         except:
-            pass
+         pass
 
     bot.send_message(message.chat.id, f"✅ Sent to {count} users")
-    
-def safe_html(text):
-    return (
-        text.replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-    )
+
 # =========================
 # RUN BOT
 # =========================

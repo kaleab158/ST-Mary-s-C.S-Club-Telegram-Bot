@@ -493,4 +493,4 @@ def broadcast(message):
 # RUN BOT
 # =========================
 print("Bot running...")
-bot.infinity_polling(timeout=10, long_polling_timeout=5)
+bot.polling(none_stop=True, skip_pending=True)

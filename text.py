@@ -130,7 +130,7 @@ def send_question(chat_id, uid):
     q = qlist[index]
 
     # =========================
-    # QUOTES MODE (FIXED — NO LOOP)
+    # QUOTES MODE
     # =========================
     if mode == "quotes":
         bot.send_message(
@@ -193,8 +193,7 @@ def finish_quiz(chat_id, uid):
 
     for admin in ADMIN_IDS:
         try:
-            bot.send_message(
-                admin,
+            bot.send_message(admin,
 f"""
 🧠 QUIZ SUBMISSION
 
@@ -208,8 +207,7 @@ f"""
 
 ANSWERS:
 {text}
-"""
-            )
+""")
         except:
             pass
 
@@ -254,7 +252,7 @@ def callback(call):
         send_question(call.message.chat.id, uid)
 
 # =========================
-# FILE UPLOAD
+# FILE HANDLER
 # =========================
 @bot.message_handler(content_types=['document'])
 def file_handler(message):
@@ -293,9 +291,9 @@ def file_handler(message):
     user_state[uid] = None
 
 # =========================
-# MESSAGE HANDLER
+# MESSAGE HANDLER (FIXED)
 # =========================
-@bot.message_handler(func=lambda m: True)
+@bot.message_handler(func=lambda m: m.content_type == "text" and not m.text.startswith("/"))
 def handler(message):
 
     uid = message.from_user.id
@@ -348,7 +346,7 @@ def handler(message):
         bot.send_message(message.chat.id, "🔙 Main Menu", reply_markup=main_menu())
 
 # =========================
-# START
+# START (WORKING NOW)
 # =========================
 @bot.message_handler(commands=['start'])
 def start(message):

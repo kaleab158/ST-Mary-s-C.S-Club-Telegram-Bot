@@ -18,7 +18,7 @@ MONGO_PASS = quote_plus("kaleb@1581")
 MONGO_URI = f"mongodb+srv://{MONGO_USER}:{MONGO_PASS}@smucsbot.dxbymsc.mongodb.net/?appName=SMUCSBOT"
 
 client = MongoClient(MONGO_URI)
-db = client["smu_bot"]
+db = client["SMUCSBOT"]
 
 users_col = db["users"]
 quiz_col = db["quiz_results"]
@@ -493,4 +493,4 @@ def broadcast(message):
 # RUN BOT
 # =========================
 print("Bot running...")
-bot.infinity_polling(skip_pending=True, timeout=30)
+bot.infinity_polling(timeout=10, long_polling_timeout=5)

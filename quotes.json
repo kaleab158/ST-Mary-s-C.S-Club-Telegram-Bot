@@ -1,16 +1,16 @@
 [
-  {
-    "title": "Carpe Diem , -> Gather ye rosebuds while ye may",
-    "quote": "Old Time is still a-flying;And this same flower that smiles to-day,To-morrow will be dying. ( Robert Herrick 1648)",
-    "inspiration": "Dead Poets Society",
-    "language": "Java",
-    "question": "A student believes every day is a new chance to succeed.\n Write a Java program named CarpeDiem that prints a motivational message about seizing the day."
-  },
- {
-  "title": "O Captain! My Captain  (Walt Whitman 1865 ) \n",
-  "quote": "O Captain! My Captain! our fearful voyage is done. \n",
-  "inspiration": "O Captain! My Captain!",
-  "language": "Java",
-  "question": "A ship is lost at sea with two possible directions. \n If the captain chooses the safe course (true), print a message of survival and hope. Otherwise, print a message of loss in the storm."
+{
+  "title": " 🎖️Carpe Diem → Gather ye rosebuds while ye may\n",
+  "quote": "Old Time is still a-flying; And this same flower that smiles to-day, To-morrow will be dying. (Robert Herrick 1648)\n",
+  "inspiration": " 🎥 Dead Poets Society (1989)\n",
+  "language": "Java\n",
+  "question": "Create a Java program using class inheritance based on the concept of 'Carpe Diem'.\n\nA student believes every day is a new chance to succeed and live fully.\n\nYour program must:\n- Create a base class Poem that stores: title, quote, inspiration, and language.\n- Create a child class CarpeDiem that inherits from Poem.\n- Add a method that prints a motivational message about seizing the day and making the most of every opportunity.\n- Demonstrate the idea that time is always moving and opportunities should not be wasted."
+},
+{
+  "title": " 🚢 O Captain! My Captain (Walt Whitman 1865) 🚢\n",
+  "quote": "O Captain! My Captain! our fearful Trip is done .....\n",
+  "inspiration": " ✅ A Quote for Abraham Lincoln by Walt Whitman\n",
+  "language": "Java\n",
+  "question": "Create a Java program using class inheritance based on the following concept:\n\nA poem titled 'O Captain! My Captain' (Walt Whitman, 1865) describes a ship’s journey at sea \n. The captain must choose between two paths:\n\nIf the captain chooses the safe course (true), the ship survives and reaches hope and safety.\nIf the captain chooses dangerous course (false), the ship is lost at sea.\n\nYour program must:\n- Create a base class Poem that stores: :- title \n, :-Quote \n, :-inspiration\n, and language.\n- Create a child class ShipPoem that inherits from Poem.\n- Add a method that takes a boolean decision and prints the outcome of the ship’s journey. \n Good Luck 🚀"
 }
 ]

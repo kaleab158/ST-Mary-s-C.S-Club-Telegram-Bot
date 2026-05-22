@@ -130,7 +130,7 @@ def send_question(chat_id, uid):
     q = qlist[index]
 
     # =========================
-    # QUOTES MODE (SPECIAL)
+    # QUOTES MODE (FIXED — NO LOOP)
     # =========================
     if mode == "quotes":
         bot.send_message(
@@ -148,7 +148,6 @@ def send_question(chat_id, uid):
         )
 
         quiz_progress[uid]["index"] += 1
-        send_question(chat_id, uid)
         return
 
     # =========================
@@ -216,12 +215,9 @@ ANSWERS:
 
     bot.send_message(chat_id, "✅ Quiz completed successfully!")
 
-    # =========================
-    # QUOTES FILE SUBMISSION TRIGGER
-    # =========================
     if mode == "quotes":
         user_state[uid] = "quotes_upload"
-        bot.send_message(chat_id, "📤 Now upload your coding file for submission (Quotes Challenge)")
+        bot.send_message(chat_id, "📤 Upload your coding file now")
         return
 
     del quiz_progress[uid]
@@ -258,7 +254,7 @@ def callback(call):
         send_question(call.message.chat.id, uid)
 
 # =========================
-# FILE UPLOAD HANDLER (QUOTES ONLY)
+# FILE UPLOAD
 # =========================
 @bot.message_handler(content_types=['document'])
 def file_handler(message):
@@ -294,7 +290,6 @@ def file_handler(message):
             pass
 
     bot.send_message(message.chat.id, "✅ File submitted successfully!")
-
     user_state[uid] = None
 
 # =========================
@@ -306,7 +301,6 @@ def handler(message):
     uid = message.from_user.id
     text = message.text
 
-    # PASSWORD FLOW
     if uid in waiting_password:
 
         mode = waiting_password[uid]
@@ -319,7 +313,6 @@ def handler(message):
             bot.send_message(message.chat.id, "❌ Wrong Password")
         return
 
-    # MAIN MENU
     if text == BTN_CHALLENGE:
         bot.send_message(message.chat.id, "🎯 Choose:", reply_markup=challenge_menu())
 

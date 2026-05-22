@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Carpe Diem , -> Gather ye rosebuds while ye may",
+    "quote": "Old Time is still a-flying;And this same flower that smiles to-day,To-morrow will be dying. ( Robert Herrick 1648)",
+    "inspiration": "Dead Poets Society",
+    "language": "Java",
+    "question": "A student believes every day is a new chance to succeed.\n Write a Java program named CarpeDiem that prints a motivational message about seizing the day."
+  },
+ {
+  "title": "O Captain! My Captain  (Walt Whitman 1865 ) \n",
+  "quote": "O Captain! My Captain! our fearful voyage is done. \n",
+  "inspiration": "O Captain! My Captain!",
+  "language": "Java",
+  "question": "A ship is lost at sea with two possible directions. \n If the captain chooses the safe course (true), print a message of survival and hope. Otherwise, print a message of loss in the storm."
+}
+]

@@ -5,6 +5,8 @@ from datetime import datetime
 import pytz
 import json
 import os
+import time
+import traceback
 
 # =========================
 # MONGODB (ADDED)
@@ -185,6 +187,14 @@ THREAD ID: {message.message_thread_id}
 MESSAGE ID: {message.message_id}
 """
     )
+def safe_send_photo(chat_id, photo, retries=3):
+    for i in range(retries):
+        try:
+            return bot.send_photo(chat_id, photo)
+        except Exception as e:
+            print(f"send_photo retry {i+1} failed: {e}")
+            time.sleep(2)
+
 
 def challenge_menu():
     kb = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -596,6 +606,17 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+def safe_send_media_group(chat_id, chunk, retries=3):
+    for i in range(retries):
+        try:
+            return bot.send_media_group(chat_id, chunk)
+        except Exception as e:
+            print(f"retry {i+1}: {e}")
+            time.sleep(2)
+
+    print("❌ FAILED permanently: media group could not be sent")
+    return None
+
 def send_exam_papers(chat_id, course):
 
     folder = final_papers_folder.get(course)
@@ -611,7 +632,8 @@ def send_exam_papers(chat_id, course):
     for img in images:
         if img.lower().endswith((".jpg", ".jpeg", ".png")):
             img_path = os.path.join(folder, img)
-            media.append(telebot.types.InputMediaPhoto(open(img_path, "rb")))
+            file_obj = open(img_path, "rb")
+            media.append(telebot.types.InputMediaPhoto(file_obj))
 
     if not media:
         bot.send_message(chat_id, "❌ No images found")
@@ -622,8 +644,9 @@ def send_exam_papers(chat_id, course):
         for i in range(0, len(lst), size):
             yield lst[i:i + size]
 
+
     for chunk in chunk_list(media, 10):
-        bot.send_media_group(chat_id, chunk)
+     safe_send_media_group(chat_id, chunk)
 
     bot.send_message(chat_id, f"📄 Sent {len(media)} exam papers for {course.upper()}")
 # =========================
@@ -631,8 +654,7 @@ def send_exam_papers(chat_id, course):
 # =========================
 @bot.message_handler(func=lambda m: m.content_type == "text" and not m.text.startswith("/"))
 def handler(message):
-
-
+ try:
     uid = message.from_user.id
     text = message.text
 
@@ -753,6 +775,13 @@ To build strong developers through practice, learning, and real coding experienc
 
     elif text == BTN_BACK:
         bot.send_message(message.chat.id, "🔙 Main Menu", reply_markup=main_menu())
+   
+
+ except Exception as e:
+    print("❌ HANDLER ERROR:")
+    traceback.print_exc()
+
+
 
 # =========================
 # SAVE USER ON START (MONGO ADDED)

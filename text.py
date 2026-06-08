@@ -72,10 +72,15 @@ QUIZ_PASSWORDS = {
 ADMIN_IDS = [782362392, 1259171903]
              
             #  , 5511982710, 1259171903]
-CHANNEL_ID = "-1002281470835"
-@bot.message_handler(commands=['id'])
-def get_id(message):
-    bot.send_message(message.chat.id, message.chat.id)
+CHANNEL_ID = -1001941707704
+THREAD_ID = 836
+# @bot.message_handler(commands=['id'])
+# def get_id(message):
+#     print("CHAT ID:", message.chat.id)
+#     print("THREAD ID:", message.message_thread_id)
+#     print("MESSAGE ID:", message.message_id)
+
+    # bot.reply_to(message, "Check console")
 # =========================
 # BUTTONS
 # =========================
@@ -170,10 +175,16 @@ def main_menu():
 
     return kb
 
-@bot.message_handler(func=lambda m: True)
-def debug_thread(message):
-    print("CHAT ID:", message.chat.id)
-    print("THREAD ID:", message.message_thread_id)
+@bot.message_handler(commands=['id'])
+def get_id(message):
+    bot.reply_to(
+        message,
+        f"""
+CHAT ID: {message.chat.id}
+THREAD ID: {message.message_thread_id}
+MESSAGE ID: {message.message_id}
+"""
+    )
 
 def challenge_menu():
     kb = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -334,26 +345,22 @@ def send_poll_quiz(message):
         return
 
     bot.send_message(
-        CHANNEL_ID,
-        "🚀 SMU CS CLUB CODING QUIZ .. "
-    )
+    chat_id=CHANNEL_ID,
+    text="🚀 CODING QUIZ  ...",
+    message_thread_id=THREAD_ID
+)
 
     for q in poll_questions:
 
         sent_poll = bot.send_poll(
-
-            chat_id=CHANNEL_ID,
-
-            question=q["question"],
-
-            options=q["options"],
-
-            type="quiz",
-
-            correct_option_id=q["correct"],
-
-            is_anonymous=False
-        )
+    chat_id=CHANNEL_ID,
+    message_thread_id=THREAD_ID,
+    question=q["question"],
+    options=q["options"],
+    type="quiz",
+    correct_option_id=q["correct"],
+    is_anonymous=False
+)
         
         # print("POLL ID:", sent_poll.poll.id)
         # print("MESSAGE ID:", sent_poll.message_id)

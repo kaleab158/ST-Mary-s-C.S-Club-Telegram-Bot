@@ -1,5 +1,5 @@
 {
-  "title": "Python Quiz",
+  "title": "Python Quiz ",
   "questions": [
     "1. What will be the final state or output of this list multiplication loop?\n\nboxes = [[]] * 3\nboxes[0].append(\"Surprise!\")\nprint(boxes)\nA) [['Surprise!'], [], apply []]\nB) [['Surprise!'], ['Surprise!'], ['Surprise!']]\nC) IndexError: list index out of range\nD) [['Surprise!']]",
 

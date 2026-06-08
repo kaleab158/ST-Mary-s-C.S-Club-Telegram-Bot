@@ -9,6 +9,7 @@ import os
 # =========================
 # MONGODB (ADDED)
 # =========================
+poll_message_ids = {}   # stores poll_id -> message_id
 from pymongo import MongoClient
 from urllib.parse import quote_plus
 
@@ -46,6 +47,14 @@ quiz_progress = {}
 quiz_mode = {}
 waiting_password = {}
 last_question_message = {}
+# =========================
+# POLL QUIZ STORAGE
+# =========================
+
+poll_correct_answers = {}
+
+poll_user_sessions = {}
+
 
 # =========================
 # PASSWORDS
@@ -60,11 +69,17 @@ QUIZ_PASSWORDS = {
 # =========================
 # ADMINS
 # =========================
-ADMIN_IDS = [782362392, 5511982710, 1259171903]
-
+ADMIN_IDS = [782362392, 1259171903]
+             
+            #  , 5511982710, 1259171903]
+CHANNEL_ID = "-1002281470835"
+@bot.message_handler(commands=['id'])
+def get_id(message):
+    bot.send_message(message.chat.id, message.chat.id)
 # =========================
 # BUTTONS
 # =========================
+BTN_FINAL_EXAM = "📄 Privious Exam Worksheet"
 UPCOMING_EVENT_LINK = "https://t.me/smu_cs_club/665"
 JOB_LINK = "https://t.me/smu_cs_club/665"
 BTN_CHALLENGE = "🎖️ Coding Challenges"
@@ -78,7 +93,39 @@ BTN_CPP = "💻 C++ Quiz"
 BTN_CSHARP = "⚙️ C# Quiz"
 BTN_QUOTES = "📝 Quotes Coding Challenge"
 BTN_BACK = "🔙 Back"
+BTN_OOP = "🧠 Object Oriented Programming"
+BTN_LINEAR = "📊 Linear Algebra"
+BTN_CA = "💻 Computer Organization & Architecture"
+BTN_NSA = "🌐 Network & System Administration"
+BTN_DSA = "📚 Data Structure & Algorithm"
+BTN_BACK_EXAM = "🔙 Back"
 
+# ====================
+#  final Exam Menu
+#====================
+def final_exam_menu():
+    kb = ReplyKeyboardMarkup(resize_keyboard=True)
+    kb.row(BTN_CA)
+    kb.row(BTN_LINEAR)
+    kb.row(BTN_OOP)
+    kb.row(BTN_NSA)
+    kb.row(BTN_DSA)
+    kb.row(BTN_BACK_EXAM)
+    return kb
+
+
+#============================
+#final exam peper 
+#==============================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+final_papers_folder = {
+    "oop": os.path.join(BASE_DIR, "final_papers/oop"),
+    "dsa": os.path.join(BASE_DIR, "final_papers/dsa"),
+    "ca": os.path.join(BASE_DIR, "final_papers/ca"),
+    "nsa": os.path.join(BASE_DIR, "final_papers/nsa"),
+    "linear": os.path.join(BASE_DIR, "final_papers/linear")
+}
 # =========================
 # FIXED JSON LOADER
 # =========================
@@ -91,18 +138,42 @@ python_questions = load_questions("python.json")
 cpp_questions = load_questions("c++.json")
 csharp_questions = load_questions("c#.json")
 quotes_questions = load_questions("quotes.json")
+#========================
+# Poll  Questions 
+#=========================
+# =========================
+# CHANNEL POLL QUESTIONS
+# =========================
+
+def load_poll_questions():
+    with open("poll_questions.json", "r", encoding="utf-8") as f:
+        return json.load(f)
+
+poll_questions = load_poll_questions()
+TOTAL_POLL_QUESTIONS = len(poll_questions)
+
 
 # =========================
 # MENUS
 # =========================
 def main_menu():
     kb = ReplyKeyboardMarkup(resize_keyboard=True)
+
     kb.row(BTN_CHALLENGE)
+    kb.row(BTN_FINAL_EXAM)
+
     kb.row(BTN_EVENTS)
     kb.row(BTN_JOBS)
+
     kb.row(BTN_RESOURCES)
     kb.row(BTN_ABOUT)
+
     return kb
+
+@bot.message_handler(func=lambda m: True)
+def debug_thread(message):
+    print("CHAT ID:", message.chat.id)
+    print("THREAD ID:", message.message_thread_id)
 
 def challenge_menu():
     kb = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -244,6 +315,86 @@ ANSWERS:
     del quiz_progress[uid]
     del quiz_mode[uid]
 
+
+#=======================
+#Delete command 
+#=====================
+
+
+
+
+# =========================
+# SEND CHANNEL POLL QUIZ
+# =========================
+
+@bot.message_handler(commands=['sendpollquiz'])
+def send_poll_quiz(message):
+
+    if message.from_user.id not in ADMIN_IDS:
+        return
+
+    bot.send_message(
+        CHANNEL_ID,
+        "🚀 SMU CS CLUB CODING QUIZ .. "
+    )
+
+    for q in poll_questions:
+
+        sent_poll = bot.send_poll(
+
+            chat_id=CHANNEL_ID,
+
+            question=q["question"],
+
+            options=q["options"],
+
+            type="quiz",
+
+            correct_option_id=q["correct"],
+
+            is_anonymous=False
+        )
+        
+        # print("POLL ID:", sent_poll.poll.id)
+        # print("MESSAGE ID:", sent_poll.message_id)
+        # SAVE CORRECT ANSWERS
+        poll_correct_answers[
+            sent_poll.poll.id
+        ] = q["correct"]
+        poll_correct_answers[sent_poll.poll.id] = q["correct"]
+        poll_message_ids[sent_poll.poll.id] = sent_poll.message_id
+    bot.reply_to(
+        message,
+        "✅ Poll quiz sent successfully!"
+    )    
+
+
+@bot.message_handler(commands=['deletepoll'])
+def delete_all_polls(message):
+
+    if message.from_user.id not in ADMIN_IDS:
+        bot.send_message(message.chat.id, "❌ Not allowed")
+        return
+
+    if not poll_message_ids:
+        bot.send_message(message.chat.id, "❌ No polls to delete")
+        return
+
+    deleted = 0
+
+    for poll_id, message_id in list(poll_message_ids.items()):
+        try:
+            bot.delete_message(CHANNEL_ID, message_id)
+            deleted += 1
+        except Exception as e:
+            print(f"Failed to delete {poll_id}: {e}")
+
+    poll_message_ids.clear()
+
+    bot.send_message(
+        message.chat.id,
+        f"✅ Deleted {deleted} poll(s) successfully"
+    )
 # =========================
 # CALLBACK
 # =========================
@@ -273,6 +424,112 @@ def callback(call):
             pass
 
         send_question(call.message.chat.id, uid)
+
+# =========================
+# POLL ANSWER HANDLER
+# =========================
+
+@bot.poll_answer_handler()
+def handle_poll_answer(poll_answer):
+
+    user_id = poll_answer.user.id
+
+    username = poll_answer.user.username
+
+    poll_id = poll_answer.poll_id
+
+    selected_option = poll_answer.option_ids[0]
+
+    # FIRST ANSWER
+    if user_id not in poll_user_sessions:
+
+        poll_user_sessions[user_id] = {
+
+            "start_time": datetime.now(),
+
+            "score": 0,
+
+            "answered": 0
+        }
+
+    correct_option = poll_correct_answers.get(
+        poll_id
+    )
+
+    # CORRECT ANSWER
+    if selected_option == correct_option:
+
+        poll_user_sessions[user_id]["score"] += 1
+
+    poll_user_sessions[user_id]["answered"] += 1
+
+    # FINISHED QUIZ
+    if poll_user_sessions[user_id]["answered"] == TOTAL_POLL_QUESTIONS:
+
+        end_time = datetime.now()
+
+        start_time = poll_user_sessions[user_id]["start_time"]
+
+        duration = end_time - start_time
+
+        score = poll_user_sessions[user_id]["score"]
+
+        # SAVE TO MONGODB
+        quiz_col.insert_one({
+
+            "user_id": user_id,
+
+            "username": username,
+
+            "score": score,
+
+            "total_questions": TOTAL_POLL_QUESTIONS,
+
+            "started": str(start_time),
+
+            "completed": str(end_time),
+
+            "duration": str(duration),
+
+            "type": "channel_poll_quiz"
+        })
+
+        # SEND TO ADMINS
+        for admin in ADMIN_IDS:
+
+            try:
+
+                bot.send_message(
+                    admin,
+
+f"""
+🎓 CHANNEL QUIZ COMPLETED
+
+👤 User:
+@{username}
+
+🆔 ID:
+{user_id}
+
+✅ Score:
+{score}/{TOTAL_POLL_QUESTIONS}
+
+🕒 Started:
+{start_time.strftime('%Y-%m-%d %H:%M:%S')}
+
+🏁 Completed:
+{end_time.strftime('%Y-%m-%d %H:%M:%S')}
+
+⏳ Duration:
+{duration}
+"""
+                )
+
+            except:
+                pass
+
+        # RESET USER SESSION
+        del poll_user_sessions[user_id]
 
 # =========================
 # FILE UPLOAD
@@ -325,12 +582,49 @@ def file_handler(message):
 
     bot.send_message(message.chat.id, "✅ File submitted successfully!")
     user_state[uid] = None
+#====================
+#send exam peper 
+#=====================
+import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def send_exam_papers(chat_id, course):
+
+    folder = final_papers_folder.get(course)
+
+    if not folder or not os.path.exists(folder):
+        bot.send_message(chat_id, "❌ No exam papers available")
+        return
+
+    images = sorted(os.listdir(folder))
+
+    media = []
+
+    for img in images:
+        if img.lower().endswith((".jpg", ".jpeg", ".png")):
+            img_path = os.path.join(folder, img)
+            media.append(telebot.types.InputMediaPhoto(open(img_path, "rb")))
+
+    if not media:
+        bot.send_message(chat_id, "❌ No images found")
+        return
+
+    # send in chunks of 10 (Telegram limit)
+    def chunk_list(lst, size):
+        for i in range(0, len(lst), size):
+            yield lst[i:i + size]
+
+    for chunk in chunk_list(media, 10):
+        bot.send_media_group(chat_id, chunk)
+
+    bot.send_message(chat_id, f"📄 Sent {len(media)} exam papers for {course.upper()}")
 # =========================
 # MESSAGE HANDLER
 # =========================
 @bot.message_handler(func=lambda m: m.content_type == "text" and not m.text.startswith("/"))
 def handler(message):
+
 
     uid = message.from_user.id
     text = message.text
@@ -377,9 +671,31 @@ def handler(message):
         waiting_password[uid] = "cpp"
         bot.send_message(message.chat.id, "🔐 Enter Password For C++ ")
 
+    elif text == BTN_FINAL_EXAM:
+         bot.send_message(message.chat.id, "📄 Choose Course:", reply_markup=final_exam_menu())
+
     elif text == BTN_CSHARP:
         waiting_password[uid] = "csharp"
         bot.send_message(message.chat.id, "🔐 Enter Password For C#")
+
+
+    elif text == BTN_OOP:
+        send_exam_papers(message.chat.id, "oop")
+
+    elif text == BTN_LINEAR:
+        send_exam_papers(message.chat.id, "linear")
+
+    elif text == BTN_CA:
+        send_exam_papers(message.chat.id, "ca")
+
+    elif text == BTN_NSA:
+        send_exam_papers(message.chat.id, "nsa")
+
+    elif text == BTN_DSA:
+        send_exam_papers(message.chat.id, "dsa")
+
+    elif text == BTN_BACK_EXAM:
+        bot.send_message(message.chat.id, "🔙 Main Menu", reply_markup=main_menu())
 
     elif text == BTN_QUOTES:
         waiting_password[uid] = "quotes"
@@ -504,3 +820,4 @@ def broadcast(message):
 # =========================
 print("Bot running...")
 bot.infinity_polling(timeout=10, long_polling_timeout=5)
+# not been in github yet...

@@ -1,51 +1,32 @@
 [
   {
-    "question": "What will be the final state or output of this list multiplication loop?\n\nboxes = [[]] * 3\nboxes[0].append(\"Surprise!\")\nprint(boxes)",
+    "question": "What will be the output of this simple list slicing code?\n\nnumbers = [1, 2, 3, 4, 5]\nprint(numbers[1:4])",
     "options": [
-      "[['Surprise!'], [], []]",
-      "[['Surprise!'], ['Surprise!'], ['Surprise!']]",
-      "IndexError: list index out of range",
-      "[['Surprise!']]"
+      "[1, 2, 3, 4]",
+      "[2, 3, 4]",
+      "[2, 3, 4, 5]",
+      "[1, 2, 3]"
     ],
     "correct": 1
   },
   {
-    "question": "Look closely at this basic default argument execution. What is printed on the second call?\n\ndef add_item(val, items=[]):\n    items.append(val)\n    return items\n\nadd_item(1)\nprint(add_item(2))",
+    "question": "What does this string multiplication operation print?\n\nword = \"Hi\"\nprint(word * 3)",
     "options": [
-      "[2]",
-      "[1, 2]",
-      "TypeError: items is immutable",
-      "[1, [2]]"
+      "Hi Hi Hi",
+      "Hi3",
+      "HiHiHi",
+      "Error because strings cannot be multiplied"
     ],
-    "correct": 1
+    "correct": 2
   },
   {
-    "question": "Python boasts clear syntax. What does this chained evaluation evaluate to?\n\nprint(False == False in [False])",
+    "question": "What will be the value of x after this code runs?\n\nx = 10\nx += 5\nx *= 2\nprint(x)",
     "options": [
-      "True",
-      "False",
-      "SyntaxError",
-      "TypeError"
+      "20",
+      "25",
+      "30",
+      "15"
     ],
-    "correct": 0
-  }, {
-    "question": "What is the value of x after this boolean logic assignment executes?\n\nx = True or False and False",
-    "options": [
-      "True",
-      "False",
-      "None",
-      "SyntaxError"
-    ],
-    "correct": 0
-  },
-  {
-    "question": "Python values readability. What does this code print?\n\na = 256; b = 256\nc = 257; d = 257\nprint(a is b, c is d)",
-    "options": [
-      "True True",
-      "True False",
-      "False False",
-      "False True"
-    ],
-    "correct": 1
+    "correct": 2
   }
 ]

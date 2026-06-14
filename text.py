@@ -74,6 +74,8 @@ QUIZ_PASSWORDS = {
 ADMIN_IDS = [782362392, 1259171903]
              
             #  , 5511982710, 1259171903]
+WINNER_GROUP_ID = -1001941707704
+WINNER_THREAD_ID = 836
 CHANNEL_ID = -1001941707704
 THREAD_ID = 836
 # @bot.message_handler(commands=['id'])
@@ -159,6 +161,9 @@ def load_poll_questions():
 poll_questions = load_poll_questions()
 TOTAL_POLL_QUESTIONS = len(poll_questions)
 
+def load_winners():
+    with open("winners.json", "r", encoding="utf-8") as f:
+        return json.load(f)
 
 # =========================
 # MENUS
@@ -341,9 +346,60 @@ ANSWERS:
 #Delete command 
 #=====================
 
+# =========================
+# Winner command 
+#==========================
+@bot.message_handler(commands=['winners'])
+def send_winners(message):
 
+    if message.from_user.id not in ADMIN_IDS:
+        return
 
+    data = load_winners()
 
+    winner_text = f"""
+🏆 <b>{data['title']}</b>
+
+━━━━━━━━━━━━━━━━━━
+
+📅 <b>{data['week']}</b>
+
+<pre>
+🥇 1st Place  : {data['first']}
+
+🥈 2nd Place  : {data['second']}
+
+🥉 3rd Place  : {data['third']}
+</pre>
+
+━━━━━━━━━━━━━━━━━━
+
+🎉 Congratulations ...! 
+
+💻 Keep coding.
+📚 Keep learning.
+🚀 Keep growing.
+  
+  <b>SMU CS CLUB</b>
+
+"""
+
+    kwargs = {}
+
+    if WINNER_THREAD_ID:
+        kwargs["message_thread_id"] = WINNER_THREAD_ID
+
+    bot.send_message(
+        WINNER_GROUP_ID,
+        winner_text,
+        parse_mode="HTML",
+        **kwargs
+    )
+
+    bot.reply_to(
+        message,
+        "✅ Winners posted successfully!"
+    )
 # =========================
 # SEND CHANNEL POLL QUIZ
 # =========================

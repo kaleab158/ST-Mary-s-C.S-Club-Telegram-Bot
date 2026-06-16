@@ -1,32 +1,32 @@
 [
   {
-    "question": "What will be the output of this simple list slicing code?\n\nnumbers = [1, 2, 3, 4, 5]\nprint(numbers[1:4])",
+    "question": "What will this print?\n\nSystem.out.println(10 + 20 + \"Java\" + 10 + 20);",
     "options": [
-      "[1, 2, 3, 4]",
-      "[2, 3, 4]",
-      "[2, 3, 4, 5]",
-      "[1, 2, 3]"
+      "30Java30",
+      "1020Java1020",
+      "30Java1020",
+      "Java30"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "What is the output?\n\nint[] nums = {1, 2, 3};\nint[] copy = nums;\ncopy[0] = 99;\nSystem.out.println(nums[0]);",
+    "options": [
+      "1",
+      "99",
+      "0",
+      "Compilation error"
     ],
     "correct": 1
   },
   {
-    "question": "What does this string multiplication operation print?\n\nword = \"Hi\"\nprint(word * 3)",
+    "question": "What will be printed?\n\nString str = \"hello\";\nstr.toUpperCase();\nSystem.out.println(str);",
     "options": [
-      "Hi Hi Hi",
-      "Hi3",
-      "HiHiHi",
-      "Error because strings cannot be multiplied"
+      "HELLO",
+      "hello",
+      "Compilation error",
+      "null"
     ],
-    "correct": 2
-  },
-  {
-    "question": "What will be the value of x after this code runs?\n\nx = 10\nx += 5\nx *= 2\nprint(x)",
-    "options": [
-      "20",
-      "25",
-      "30",
-      "15"
-    ],
-    "correct": 2
+    "correct": 1
   }
 ]

@@ -1,31 +1,31 @@
 [
   {
-    "question": "What will this print?\n\nSystem.out.println(10 + 20 + \"Java\" + 10 + 20);",
+    "question": "What will be displayed in the JOptionPane?\n\nJTextField txt = new JTextField();\ntxt.setText(\"Java\");\ntxt.setText(txt.getText() + \" Swing\");\nJOptionPane.showMessageDialog(null, txt.getText());",
     "options": [
-      "30Java30",
-      "1020Java1020",
-      "30Java1020",
-      "Java30"
+      "Java",
+      "Swing",
+      "Java Swing",
+      "Compilation Error"
     ],
     "correct": 2
   },
   {
-    "question": "What is the output?\n\nint[] nums = {1, 2, 3};\nint[] copy = nums;\ncopy[0] = 99;\nSystem.out.println(nums[0]);",
+    "question": "What is the output?\n\nString name = \"Abbisinya car rental\";\nname.replace(\"car\", \"bike\");\nSystem.out.println(name);",
     "options": [
-      "1",
-      "99",
-      "0",
-      "Compilation error"
+      "Abbisinya bike rental",
+      "Abbisinya rental",
+      "Abbisinya car rental",
+      "Compilation Error"
     ],
-    "correct": 1
+    "correct": 2
   },
   {
-    "question": "What will be printed?\n\nString str = \"hello\";\nstr.toUpperCase();\nSystem.out.println(str);",
+    "question": "What will happen when the button is clicked?\n\nJTextField txt = new JTextField();\nJButton btn = new JButton(\"Show\");\n\nbtn.addActionListener(e -> {\n    txt.setText(\"Hello\");\n});\n\nSystem.out.println(txt.getText());",
     "options": [
-      "HELLO",
-      "hello",
-      "Compilation error",
-      "null"
+      "Hello",
+      "An empty line is printed",
+      "null",
+      "Compilation Error"
     ],
     "correct": 1
   }

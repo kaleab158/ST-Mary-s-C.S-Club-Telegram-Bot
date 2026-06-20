@@ -1,31 +1,31 @@
 [
   {
-    "question": "What will be displayed in the JOptionPane?\n\nJTextField txt = new JTextField();\ntxt.setText(\"Java\");\ntxt.setText(txt.getText() + \" Swing\");\nJOptionPane.showMessageDialog(null, txt.getText());",
+    "question": "Which layout divides a container into North, South, East, West, and Center?",
     "options": [
-      "Java",
-      "Swing",
-      "Java Swing",
-      "Compilation Error"
+      "FlowLayout",
+      "BorderLayout",
+      "GridLayout",
+      "BoxLayout"
     ],
-    "correct": 2
+    "correct": 1
   },
   {
-    "question": "What is the output?\n\nString name = \"Abbisinya car rental\";\nname.replace(\"car\", \"bike\");\nSystem.out.println(name);",
+    "question": "What is the output?\n\nJCheckBox check = new JCheckBox();\ncheck.setSelected(true);\nSystem.out.println(check.isSelected());",
     "options": [
-      "Abbisinya bike rental",
-      "Abbisinya rental",
-      "Abbisinya car rental",
-      "Compilation Error"
-    ],
-    "correct": 2
-  },
-  {
-    "question": "What will happen when the button is clicked?\n\nJTextField txt = new JTextField();\nJButton btn = new JButton(\"Show\");\n\nbtn.addActionListener(e -> {\n    txt.setText(\"Hello\");\n});\n\nSystem.out.println(txt.getText());",
-    "options": [
-      "Hello",
-      "An empty line is printed",
+      "true",
+      "false",
       "null",
-      "Compilation Error"
+      "Compilation error"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "Which component is used to display non-editable text in Java Swing?",
+    "options": [
+      "JTextField",
+      "JLabel",
+      "JButton",
+      "JTextArea"
     ],
     "correct": 1
   }

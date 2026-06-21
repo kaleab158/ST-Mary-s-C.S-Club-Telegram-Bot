@@ -364,13 +364,13 @@ def send_winners(message):
 
 📅 <b>{data['week']}</b>
 
-<pre>
-🥇 1st Place  : {data['first']}
 
-🥈 2nd Place  : {data['second']}
+🥇 <b>1st Place</b> -> {data['first']}
 
-🥉 3rd Place  : {data['third']}
-</pre>
+🥈 <b>2nd Place</b> -> {data['second']}
+
+🥉 <b>3rd Place</b> ->{data['third']}
+
 
 ━━━━━━━━━━━━━━━━━━
 

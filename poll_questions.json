@@ -1,32 +1,32 @@
 [
   {
-    "question": "Which layout divides a container into North, South, East, West, and Center?",
+    "question": "What is the output?\n\nimport pandas as pd\ndf = pd.DataFrame({'A':[10,20,30]})\nprint(df.shape[0])",
     "options": [
-      "FlowLayout",
-      "BorderLayout",
-      "GridLayout",
-      "BoxLayout"
+      "1",
+      "2",
+      "3",
+      "30"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Which function reads a CSV file in Pandas?",
+    "options": [
+      "pd.open_csv()",
+      "pd.read_csv()",
+      "pd.load_csv()",
+      "pd.csv_read()"
     ],
     "correct": 1
   },
   {
-    "question": "What is the output?\n\nJCheckBox check = new JCheckBox();\ncheck.setSelected(true);\nSystem.out.println(check.isSelected());",
+    "question": "Which Pandas object is used for tabular data?",
     "options": [
-      "true",
-      "false",
-      "null",
-      "Compilation error"
+      "Array",
+      "Series",
+      "DataFrame",
+      "Tuple"
     ],
-    "correct": 0
-  },
-  {
-    "question": "Which component is used to display non-editable text in Java Swing?",
-    "options": [
-      "JTextField",
-      "JLabel",
-      "JButton",
-      "JTextArea"
-    ],
-    "correct": 1
+    "correct": 2
   }
 ]

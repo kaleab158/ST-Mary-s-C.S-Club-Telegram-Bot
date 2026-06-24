@@ -1,32 +1,32 @@
 [
   {
-    "question": "What is the output?\n\nimport pandas as pd\ndf = pd.DataFrame({'A':[10,20,30]})\nprint(df.shape[0])",
+    "question": "What is the output?\n\nimport pandas as pd\ndf = pd.DataFrame({'Name':['Ruth','John'], 'Age':[20,22]})\nprint(df['Age'].max())",
     "options": [
-      "1",
+      "20",
+      "22",
       "2",
-      "3",
-      "30"
-    ],
-    "correct": 2
-  },
-  {
-    "question": "Which function reads a CSV file in Pandas?",
-    "options": [
-      "pd.open_csv()",
-      "pd.read_csv()",
-      "pd.load_csv()",
-      "pd.csv_read()"
+      "Age"
     ],
     "correct": 1
   },
   {
-    "question": "Which Pandas object is used for tabular data?",
+    "question": "What is the output?\n\nimport pandas as pd\ndf = pd.DataFrame({'A':[1,2,3], 'B':[4,5,6]})\nprint(df.shape)",
     "options": [
-      "Array",
-      "Series",
-      "DataFrame",
-      "Tuple"
+      "(3, 2)",
+      "(2, 3)",
+      "5",
+      "6"
     ],
-    "correct": 2
+    "correct": 0
+  },
+  {
+    "question": "What does the following code return?\n\nimport pandas as pd\ndf = pd.DataFrame({'Score':[85,90,95]})\nprint(df['Score'].mean())",
+    "options": [
+      "85",
+      "90",
+      "95",
+      "270"
+    ],
+    "correct": 1
   }
 ]

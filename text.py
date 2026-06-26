@@ -77,7 +77,7 @@ ADMIN_IDS = [782362392, 1259171903]
 WINNER_GROUP_ID = -1001941707704
 WINNER_THREAD_ID = 836
 CHANNEL_ID = -1001941707704
-frok = 200032
+frok = 2000326765456
 THREAD_ID = 836
 # @bot.message_handler(commands=['id'])
 # def get_id(message):

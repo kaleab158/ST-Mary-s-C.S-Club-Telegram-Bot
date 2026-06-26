@@ -412,7 +412,7 @@ def send_poll_quiz(message):
 
     bot.send_message(
     chat_id=CHANNEL_ID,
-    text="🐼 Python Pandas Weekly Quiz Challeng ...",
+    text="🐼 Python Pandas Weekly Quiz Challenge ...",
     message_thread_id=THREAD_ID
 )
 

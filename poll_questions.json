@@ -1,32 +1,32 @@
 [
   {
-    "question": "What is the output?\n\nimport pandas as pd\ndf = pd.DataFrame({'Name':['Ruth','John'], 'Age':[20,22]})\nprint(df['Age'].max())",
+    "question": "What is the output?\n\nimport pandas as pd\n\ndf = pd.DataFrame({'A':[5,10,15]})\n\nprint(df['A'].sum())",
     "options": [
+      "15",
       "20",
-      "22",
-      "2",
-      "Age"
+      "30",
+      "3"
     ],
-    "correct": 1
+    "correct": 2
   },
   {
-    "question": "What is the output?\n\nimport pandas as pd\ndf = pd.DataFrame({'A':[1,2,3], 'B':[4,5,6]})\nprint(df.shape)",
+    "question": "What is the output?\n\nimport pandas as pd\n\ndf = pd.DataFrame({'Name':['Ali','Sara','John']})\n\nprint(df.shape)",
     "options": [
-      "(3, 2)",
-      "(2, 3)",
-      "5",
-      "6"
+      "(1, 1)",
+      "(1, 3)",
+      "(3, 3)",
+      "(3, 1)"
     ],
-    "correct": 0
+    "correct": 3
   },
   {
-    "question": "What does the following code return?\n\nimport pandas as pd\ndf = pd.DataFrame({'Score':[85,90,95]})\nprint(df['Score'].mean())",
+    "question": "Which method displays the first 5 rows of a DataFrame by default?",
     "options": [
-      "85",
-      "90",
-      "95",
-      "270"
+      "df.tail()",
+      "df.first()",
+      "df.head()",
+      "df.show()"
     ],
-    "correct": 1
+    "correct": 2
   }
 ]

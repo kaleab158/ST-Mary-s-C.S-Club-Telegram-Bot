@@ -77,7 +77,6 @@ ADMIN_IDS = [782362392, 1259171903]
 WINNER_GROUP_ID = -1001941707704
 WINNER_THREAD_ID = 836
 CHANNEL_ID = -1001941707704
-frok = 2000326765456
 THREAD_ID = 836
 # @bot.message_handler(commands=['id'])
 # def get_id(message):
@@ -413,7 +412,7 @@ def send_poll_quiz(message):
 
     bot.send_message(
     chat_id=CHANNEL_ID,
-    text="🐼 Python Pandas Weekly Quiz Challenge ...",
+    text="🧮 Python NumPy Weekly Quiz Challenge ...",
     message_thread_id=THREAD_ID
 )
 

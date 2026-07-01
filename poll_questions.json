@@ -1,32 +1,32 @@
 [
   {
-    "question": "What is the output?\n\nimport pandas as pd\n\ndf = pd.DataFrame({'Marks':[70,80,90]})\nprint(df['Marks'].min())",
+    "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([5, 10, 15, 20])\nprint(arr.max())",
     "options": [
-      "70",
-      "80",
-      "90",
-      "240"
+      "5",
+      "10",
+      "15",
+      "20"
     ],
-    "correct": 0
+    "correct": 3
   },
   {
-    "question": "What is the output?\n\nimport pandas as pd\n\ndf = pd.DataFrame({'A':[1,2,3], 'B':[4,5,6]})\nprint(df.columns.tolist())",
+    "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([2, 4, 6])\nprint(arr * 2)",
     "options": [
-      "['A', 'B']",
-      "['1', '2']",
-      "['A']",
-      "['B']"
+      "[2 4 6]",
+      "[4 8 12]",
+      "[6 8 10]",
+      "[2 8 12]"
     ],
-    "correct": 0
+    "correct": 1
   },
   {
-    "question": "What is the output?\n\nimport pandas as pd\n\ndf = pd.DataFrame({'City':['Addis','Hawassa','Adama']})\nprint(len(df))",
+    "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([[1, 2], [3, 4]])\nprint(arr.shape)",
     "options": [
-      "1",
-      "2",
-      "3",
-      "0"
+      "(4,)",
+      "(2, 2)",
+      "(2,)",
+      "(1, 4)"
     ],
-    "correct": 2
+    "correct": 1
   }
 ]

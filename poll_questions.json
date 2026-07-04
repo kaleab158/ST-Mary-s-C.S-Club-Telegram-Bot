@@ -1,32 +1,30 @@
-[
-  {
-    "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([5, 10, 15, 20])\nprint(arr.max())",
-    "options": [
-      "5",
-      "10",
-      "15",
-      "20"
-    ],
-    "correct": 3
-  },
-  {
-    "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([2, 4, 6])\nprint(arr * 2)",
-    "options": [
-      "[2 4 6]",
-      "[4 8 12]",
-      "[6 8 10]",
-      "[2 8 12]"
-    ],
-    "correct": 1
-  },
-  {
-    "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([[1, 2], [3, 4]])\nprint(arr.shape)",
-    "options": [
-      "(4,)",
-      "(2, 2)",
-      "(2,)",
-      "(1, 4)"
-    ],
-    "correct": 1
-  }
-]
+{
+  "question": "What is the output?\n\nimport numpy as np\n\narr = np.arange(6)\nprint(arr.reshape(2, 3))",
+  "options": [
+    "[[0 1]\n [2 3]\n [4 5]]",
+    "[[0 1 2]\n [3 4 5]]",
+    "[0 1 2 3 4 5]",
+    "Error"
+  ],
+  "correct": 1
+},
+{
+  "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([10, 20, 30, 40, 50])\nprint(arr[1:4])",
+  "options": [
+    "[20 30 40]",
+    "[10 20 30]",
+    "[20 30 40 50]",
+    "[30 40 50]"
+  ],
+  "correct": 0
+},
+{
+  "question": "Which NumPy feature allows arithmetic operations between arrays of different shapes when they are compatible?",
+  "options": [
+    "Broadcasting",
+    "Slicing",
+    "Reshaping",
+    "Vectorization"
+  ],
+  "correct": 0
+}

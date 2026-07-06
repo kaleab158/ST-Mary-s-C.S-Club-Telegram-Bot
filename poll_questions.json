@@ -1,32 +1,32 @@
 [
   {
-    "question": "What is the output?\n\nimport numpy as np\n\narr = np.arange(6)\nprint(arr.reshape(2, 3))",
+    "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([2, 4, 6])\nprint(arr * 3)",
     "options": [
-      "[[0 1]\n [2 3]\n [4 5]]",
-      "[[0 1 2]\n [3 4 5]]",
-      "[0 1 2 3 4 5]",
-      "Error"     
+      "[6 12 18]",
+      "[2 4 6 2 4 6 2 4 6]",
+      "[5 7 9]",
+      "Error"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([[1, 2], [3, 4]])\nprint(arr.shape)",
+    "options": [
+      "(4,)",
+      "(2, 2)",
+      "(2,)",
+      "2"
     ],
     "correct": 1
   },
   {
-    "question": "What is the output?\n\nimport numpy as np\n\narr = np.array([10, 20, 30, 40, 50])\nprint(arr[1:4])",
+    "question": "Which NumPy function is used to create an array filled with zeros?",
     "options": [
-      "[20 30 40]",
-      "[10 20 30]",
-      "[20 30 40 50]",
-      "[30 40 50]"
+      "np.empty()",
+      "np.ones()",
+      "np.zeros()",
+      "np.full()"
     ],
-    "correct": 0
-  },
-  {
-    "question": "Which NumPy feature allows arithmetic operations between arrays of different shapes when they are compatible?",
-    "options": [
-      "Broadcasting",
-      "Slicing",
-      "Reshaping",
-      "Vectorization"
-    ],
-    "correct": 0
+    "correct": 2
   }
 ]

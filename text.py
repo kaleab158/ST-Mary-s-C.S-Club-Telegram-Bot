@@ -11,7 +11,8 @@ import traceback
 # =========================
 # MONGODB (ADDED)
 # =========================
-poll_message_ids = {}   # stores poll_id -> message_id
+poll_message_ids = {}   # stores poll_id -> poll message id
+quiz_text_message_ids = {}  # stores poll_id -> code/question message id
 from pymongo import MongoClient
 from urllib.parse import quote_plus
 
@@ -35,6 +36,7 @@ except Exception as e:
 
 users_col = db["users"]
 quiz_col = db["quiz_results"]
+poll_delete_col = db["poll_messages"]
 
 # =========================
 # BOT
@@ -428,12 +430,12 @@ def send_poll_quiz(message):
 
         message_text += "👇 <b>Vote in the poll below.</b>"
 
-        bot.send_message(
-            chat_id=CHANNEL_ID,
-            message_thread_id=THREAD_ID,
-            text=message_text,
-            parse_mode="HTML"
-        )
+        question_message = bot.send_message(
+    chat_id=CHANNEL_ID,
+    message_thread_id=THREAD_ID,
+    text=message_text,
+    parse_mode="HTML"
+)
 
         sent_poll = bot.send_poll(
             chat_id=CHANNEL_ID,
@@ -446,7 +448,22 @@ def send_poll_quiz(message):
         )
 
         poll_correct_answers[sent_poll.poll.id] = q["correct"]
+
+        # save poll message id
+      # save in memory
+     # save in memory
         poll_message_ids[sent_poll.poll.id] = sent_poll.message_id
+        quiz_text_message_ids[sent_poll.poll.id] = question_message.message_id
+
+
+# save permanently in MongoDB
+        poll_delete_col.insert_one({
+        "poll_id": sent_poll.poll.id,
+        "poll_message_id": sent_poll.message_id,
+        "text_message_id": question_message.message_id,
+        "chat_id": CHANNEL_ID,
+        "thread_id": THREAD_ID
+         })
 
     bot.reply_to(
         message,
@@ -460,24 +477,63 @@ def delete_all_polls(message):
         bot.send_message(message.chat.id, "❌ Not allowed")
         return
 
-    if not poll_message_ids:
-        bot.send_message(message.chat.id, "❌ No polls to delete")
+
+    polls = list(poll_delete_col.find())
+
+
+    if not polls:
+        bot.send_message(
+            message.chat.id,
+            "❌ No saved polls found"
+        )
         return
+
 
     deleted = 0
 
-    for poll_id, message_id in list(poll_message_ids.items()):
-        try:
-            bot.delete_message(CHANNEL_ID, message_id)
-            deleted += 1
-        except Exception as e:
-            print(f"Failed to delete {poll_id}: {e}")
 
+    for poll in polls:
+
+        try:
+
+            # delete poll
+            bot.delete_message(
+                poll["chat_id"],
+                poll["poll_message_id"]
+            )
+
+
+            # delete question/code message
+            bot.delete_message(
+                poll["chat_id"],
+                poll["text_message_id"]
+            )
+
+
+            deleted += 1
+            time.sleep(0.3)
+
+
+        except Exception as e:
+
+            print(
+                "Delete error:",
+                e
+            )
+
+
+    # remove database records
+    poll_delete_col.delete_many({})
+
+
+    # clear memory
     poll_message_ids.clear()
+    quiz_text_message_ids.clear()
+
 
     bot.send_message(
         message.chat.id,
-        f"✅ Deleted {deleted} poll(s) successfully"
+        f"✅ Deleted {deleted} poll quizzes"
     )
 # =========================
 # CALLBACK

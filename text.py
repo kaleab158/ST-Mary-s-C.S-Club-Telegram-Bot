@@ -411,36 +411,47 @@ def send_poll_quiz(message):
         return
 
     bot.send_message(
-    chat_id=CHANNEL_ID,
-    text="🧮 Python NumPy Weekly Quiz Challenge ...",
-    message_thread_id=THREAD_ID
-)
+        chat_id=CHANNEL_ID,
+        text="🧮 Python NumPy Weekly Quiz Challenge ...",
+        message_thread_id=THREAD_ID
+    )
 
-    for q in poll_questions:
+    for i, q in enumerate(poll_questions, start=1):
+
+        message_text = f"🧠 <b>Question {i}</b>\n\n"
+        message_text += f"{q['question']}\n\n"
+
+        if "code" in q:
+            message_text += (
+                f"<pre>{safe_html(q['code'])}</pre>\n\n"
+            )
+
+        message_text += "👇 <b>Vote in the poll below.</b>"
+
+        bot.send_message(
+            chat_id=CHANNEL_ID,
+            message_thread_id=THREAD_ID,
+            text=message_text,
+            parse_mode="HTML"
+        )
 
         sent_poll = bot.send_poll(
-    chat_id=CHANNEL_ID,
-    message_thread_id=THREAD_ID,
-    question=q["question"],
-    options=q["options"],
-    type="quiz",
-    correct_option_id=q["correct"],
-    is_anonymous=False
-)
-        
-        # print("POLL ID:", sent_poll.poll.id)
-        # print("MESSAGE ID:", sent_poll.message_id)
-        # SAVE CORRECT ANSWERS
-        poll_correct_answers[
-            sent_poll.poll.id
-        ] = q["correct"]
+            chat_id=CHANNEL_ID,
+            message_thread_id=THREAD_ID,
+            question=q["question"],
+            options=q["options"],
+            type="quiz",
+            correct_option_id=q["correct"],
+            is_anonymous=False
+        )
+
         poll_correct_answers[sent_poll.poll.id] = q["correct"]
         poll_message_ids[sent_poll.poll.id] = sent_poll.message_id
+
     bot.reply_to(
         message,
         "✅ Poll quiz sent successfully!"
-    )    
-
+    )
 
 @bot.message_handler(commands=['deletepoll'])
 def delete_all_polls(message):

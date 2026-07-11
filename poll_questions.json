@@ -1,37 +1,37 @@
 [
   {
-    "question": "What is the output?",
+    "question": "What does this code plot?",
     "language": "python",
-    "code": "import numpy as np\n\narr = np.array([[1, 2], [3, 4]])\narr[0] *= 2\nprint(arr.sum(axis=0))",
+    "code": "import matplotlib.pyplot as plt\n\nx = [1, 2, 3, 4]\ny = [1, 4, 9, 16]\nplt.plot(x, y)\nplt.title(\"Squares\")\nplt.show()",
     "options": [
-      "[8 12]",
-      "[5 8]",
-      "[6 8]",
-      "[4 6]"
+      "A straight diagonal line",
+      "A curve that increases faster as x grows (quadratic shape)",
+      "A flat horizontal line",
+      "Nothing, this code raises an error"
     ],
     "correct": 1
   },
   {
-    "question": "What is the output?",
+    "question": "What does this code plot?",
     "language": "python",
-    "code": "import numpy as np\n\narr = np.arange(1, 10).reshape(3, 3)\nprint(arr[arr % 2 == 0])",
+    "code": "import matplotlib.pyplot as plt\n\ncategories = ['A', 'B', 'C']\nvalues = [10, 25, 15]\nplt.bar(categories, values, color='skyblue')\nplt.ylabel(\"Value\")\nplt.show()",
     "options": [
-      "[2 4 6 8]",
-      "[1 3 5 7 9]",
-      "[[2 4]\n [6 8]]",
-      "Error"
+      "A pie chart with three slices",
+      "A line chart connecting three points",
+      "A bar chart with three bars, where 'B' is the tallest",
+      "A bar chart with three bars, where 'C' is the tallest"
     ],
-    "correct": 0
+    "correct": 2
   },
   {
-    "question": "What is the output?",
+    "question": "What does this code plot?",
     "language": "python",
-    "code": "import numpy as np\n\narr = np.array([[1, 2, 3], [4, 5, 6]])\nprint(np.mean(arr, axis=1))",
+    "code": "import numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.linspace(0, 10, 100)\ny = np.sin(x)\nplt.plot(x, y)\nplt.xlabel(\"x\")\nplt.ylabel(\"sin(x)\")\nplt.show()",
     "options": [
-      "[2. 5.]",
-      "[2 5]",
-      "[2.5 4.5]",
-      "[3.5]"
+      "A smooth wave oscillating between -1 and 1",
+      "A straight line from 0 to 10",
+      "A bar chart of sine values",
+      "Nothing, sin() only works with single numbers, not arrays"
     ],
     "correct": 0
   }

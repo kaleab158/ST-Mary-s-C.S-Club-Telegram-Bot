@@ -2,37 +2,37 @@
   {
     "question": "What does this code plot?",
     "language": "python",
-    "code": "import matplotlib.pyplot as plt\n\nx = [1, 2, 3, 4]\ny = [1, 4, 9, 16]\nplt.plot(x, y)\nplt.title(\"Squares\")\nplt.show()",
+    "code": "import matplotlib.pyplot as plt\n\nlabels = ['Cats', 'Dogs', 'Birds']\nsizes = [40, 45, 15]\nplt.pie(sizes, labels=labels, autopct='%1.1f%%')\nplt.title(\"Pet Survey\")\nplt.show()",
     "options": [
-      "A straight diagonal line",
-      "A curve that increases faster as x grows (quadratic shape)",
-      "A flat horizontal line",
-      "Nothing, this code raises an error"
+      "A bar chart comparing three animals",
+      "A pie chart with three slices, 'Dogs' being the largest",
+      "A pie chart with three slices, 'Birds' being the largest",
+      "A scatter plot of animal counts"
     ],
     "correct": 1
   },
   {
     "question": "What does this code plot?",
     "language": "python",
-    "code": "import matplotlib.pyplot as plt\n\ncategories = ['A', 'B', 'C']\nvalues = [10, 25, 15]\nplt.bar(categories, values, color='skyblue')\nplt.ylabel(\"Value\")\nplt.show()",
+    "code": "import matplotlib.pyplot as plt\nimport numpy as np\n\nnp.random.seed(0)\nx = np.random.rand(50)\ny = np.random.rand(50)\nplt.scatter(x, y, color='green')\nplt.xlabel(\"x\")\nplt.ylabel(\"y\")\nplt.show()",
     "options": [
-      "A pie chart with three slices",
-      "A line chart connecting three points",
-      "A bar chart with three bars, where 'B' is the tallest",
-      "A bar chart with three bars, where 'C' is the tallest"
+      "50 randomly scattered points with no clear pattern",
+      "A single smooth curve through 50 points",
+      "50 points forming a perfect straight line",
+      "A bar chart with 50 bars"
     ],
-    "correct": 2
+    "correct": 0
   },
   {
     "question": "What does this code plot?",
     "language": "python",
-    "code": "import numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.linspace(0, 10, 100)\ny = np.sin(x)\nplt.plot(x, y)\nplt.xlabel(\"x\")\nplt.ylabel(\"sin(x)\")\nplt.show()",
+    "code": "import matplotlib.pyplot as plt\n\nx = [1, 2, 3, 4, 5]\ny1 = [1, 2, 3, 4, 5]\ny2 = [5, 4, 3, 2, 1]\nplt.plot(x, y1, label='Increasing')\nplt.plot(x, y2, label='Decreasing')\nplt.legend()\nplt.show()",
     "options": [
-      "A smooth wave oscillating between -1 and 1",
-      "A straight line from 0 to 10",
-      "A bar chart of sine values",
-      "Nothing, sin() only works with single numbers, not arrays"
+      "Two lines that never intersect",
+      "Two lines forming an X shape, crossing near the middle",
+      "A single flat line",
+      "Nothing, you can't plot two lines on the same axes"
     ],
-    "correct": 0
+    "correct": 1
   }
 ]

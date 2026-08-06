@@ -2,37 +2,37 @@
   {
     "question": "What is the output of this code?",
     "language": "javascript",
-    "code": "let arr = [10, 20, 30];\nlet [first, , third] = arr;\nconsole.log(first, third);",
+    "code": "function greet(name = \"Guest\") {\n  console.log(`Hello, ${name}`);\n}\ngreet();\ngreet(\"John\");",
     "options": [
-      "10 20",
-      "10 30",
-      "undefined undefined",
-      "20 30"
+      "Hello, Guest\\nHello, John",
+      "Hello, undefined\\nHello, John",
+      "Hello, John\\nHello, Guest",
+      "Error: missing argument"
     ],
-    "correct": 1
-  },
-  {
-    "question": "What does this code output?",
-    "language": "javascript",
-    "code": "console.log(typeof null);\nconsole.log(typeof undefined);",
-    "options": [
-      "null undefined",
-      "object undefined",
-      "undefined object",
-      "object object"
-    ],
-    "correct": 1
+    "correct": 0
   },
   {
     "question": "What is logged to the console?",
     "language": "javascript",
-    "code": "let obj = { a: 1, b: 2 };\nlet { a, ...rest } = obj;\nconsole.log(a, rest);",
+    "code": "let user = { name: \"John\", age: 25 };\nlet { name, ...rest } = user;\nconsole.log(name, rest);",
     "options": [
-      "1 { b: 2 }",
-      "1 { a: 1, b: 2 }",
-      "undefined { a: 1, b: 2 }",
-      "{ a: 1 } { b: 2 }"
+      "John { age: 25 }",
+      "John { name: \"John\", age: 25 }",
+      "undefined { age: 25 }",
+      "{ name: \"John\" } { age: 25 }"
     ],
     "correct": 0
+  },
+  {
+    "question": "What does this code output?",
+    "language": "javascript",
+    "code": "let names = [\"John\", \"Alex\", \"Sam\"];\nlet [first, , third] = names;\nconsole.log(first, third);",
+    "options": [
+      "John Alex",
+      "John Sam",
+      "undefined undefined",
+      "Alex Sam"
+    ],
+    "correct": 1
   }
 ]

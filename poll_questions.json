@@ -1,38 +1,38 @@
 [
   {
-    "question": "What is the output of this code?",
-    "language": "javascript",
-    "code": "function greet(name = \"Guest\") {\n  console.log(`Hello, ${name}`);\n}\ngreet();\ngreet(\"John\");",
-    "options": [
-      "Hello, Guest\\nHello, John",
-      "Hello, undefined\\nHello, John",
-      "Hello, John\\nHello, Guest",
-      "Error: missing argument"
-    ],
-    "correct": 0
-  },
-  {
     "question": "What is logged to the console?",
     "language": "javascript",
-    "code": "let user = { name: \"John\", age: 25 };\nlet { name, ...rest } = user;\nconsole.log(name, rest);",
+    "code": "for (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);\n}",
     "options": [
-      "John { age: 25 }",
-      "John { name: \"John\", age: 25 }",
-      "undefined { age: 25 }",
-      "{ name: \"John\" } { age: 25 }"
-    ],
-    "correct": 0
-  },
-  {
-    "question": "What does this code output?",
-    "language": "javascript",
-    "code": "let names = [\"John\", \"Alex\", \"Sam\"];\nlet [first, , third] = names;\nconsole.log(first, third);",
-    "options": [
-      "John Alex",
-      "John Sam",
-      "undefined undefined",
-      "Alex Sam"
+      "0 1 2",
+      "3 3 3",
+      "0 0 0",
+      "undefined undefined undefined"
     ],
     "correct": 1
+  },
+  {
+    "question": "What is printed to the console?",
+    "language": "javascript",
+    "code": "function foo() {\n  console.log(this);\n}\nconst obj = { foo };\nconst bar = obj.foo;\nbar();",
+    "options": [
+      "obj",
+      "undefined",
+      "global object or undefined depending on strict mode",
+      "Error"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "What does this print?",
+    "language": "javascript",
+    "code": "console.log(NaN === NaN);\nconsole.log(Object.is(NaN, NaN));",
+    "options": [
+      "true true",
+      "false false",
+      "false true",
+      "true false"
+    ],
+    "correct": 2
   }
 ]

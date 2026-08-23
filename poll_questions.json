@@ -2,37 +2,37 @@
   {
     "question": "What is logged to the console?",
     "language": "javascript",
-    "code": "for (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);\n}",
+    "code": "console.log([] + []);\nconsole.log([] + {});\nconsole.log({} + []);",
     "options": [
-      "0 1 2",
-      "3 3 3",
-      "0 0 0",
-      "undefined undefined undefined"
+      "'' '[object Object]' '[object Object]'",
+      "Error Error Error",
+      "0 NaN NaN",
+      "'[]' '[object Object]' 0"
     ],
-    "correct": 1
+    "correct": 0
   },
   {
-    "question": "What is printed to the console?",
+    "question": "What is the output?",
     "language": "javascript",
-    "code": "function foo() {\n  console.log(this);\n}\nconst obj = { foo };\nconst bar = obj.foo;\nbar();",
+    "code": "let x = 10;\nfunction outer() {\n  console.log(x);\n  var x = 20;\n}\nouter();",
     "options": [
-      "obj",
+      "10",
+      "20",
       "undefined",
-      "global object or undefined depending on strict mode",
+      "ReferenceError"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "What does this log?",
+    "language": "javascript",
+    "code": "const arr = [1, 2, 3];\narr.length = 0;\nconsole.log(arr);\nconsole.log(arr[0]);",
+    "options": [
+      "[1, 2, 3] 1",
+      "[] undefined",
+      "[undefined, undefined, undefined] undefined",
       "Error"
     ],
-    "correct": 2
-  },
-  {
-    "question": "What does this print?",
-    "language": "javascript",
-    "code": "console.log(NaN === NaN);\nconsole.log(Object.is(NaN, NaN));",
-    "options": [
-      "true true",
-      "false false",
-      "false true",
-      "true false"
-    ],
-    "correct": 2
+    "correct": 1
   }
 ]

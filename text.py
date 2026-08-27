@@ -8,6 +8,7 @@ import os
 import time
 import traceback
 
+BATCH_SIZE = 3
 # =========================
 # MONGODB (ADDED)
 # =========================
@@ -28,6 +29,7 @@ client = MongoClient(
     serverSelectionTimeoutMS=10000
 )
 db = client["smu_bot"]
+poll_progress_col = db["poll_progress"]  # stores {"_id": "pointer", "index": 0}
 try:
     client.admin.command("ping")
     print("MongoDB CONNECTED ✔")
@@ -54,7 +56,16 @@ last_question_message = {}
 # =========================
 # POLL QUIZ STORAGE
 # =========================
+def get_poll_index():
+    doc = poll_progress_col.find_one({"_id": "pointer"})
+    return doc["index"] if doc else 0
 
+def set_poll_index(new_index):
+    poll_progress_col.update_one(
+        {"_id": "pointer"},
+        {"$set": {"index": new_index}},
+        upsert=True
+    )
 poll_correct_answers = {}
 
 poll_user_sessions = {}
@@ -161,7 +172,7 @@ def load_poll_questions():
         return json.load(f)
 
 poll_questions = load_poll_questions()
-TOTAL_POLL_QUESTIONS = len(poll_questions)
+TOTAL_POLL_QUESTIONS = BATCH_SIZE   # ✅ 3, not the full file length
 
 def load_winners():
     with open("winners.json", "r", encoding="utf-8") as f:
@@ -406,11 +417,27 @@ def send_winners(message):
 # SEND CHANNEL POLL QUIZ
 # =========================
 
+
 @bot.message_handler(commands=['sendpollquiz'])
 def send_poll_quiz(message):
 
     if message.from_user.id not in ADMIN_IDS:
         return
+
+    start_index = get_poll_index()
+
+    # slice out the next 3 questions
+    batch = poll_questions[start_index:start_index + BATCH_SIZE]
+
+    # if we're near the end and don't have 3 left, wrap around
+    if len(batch) < BATCH_SIZE:
+        remaining = BATCH_SIZE - len(batch)
+        batch += poll_questions[0:remaining]
+        next_index = remaining
+    else:
+        next_index = start_index + BATCH_SIZE
+        if next_index >= len(poll_questions):
+            next_index = 0
 
     bot.send_message(
         chat_id=CHANNEL_ID,
@@ -418,24 +445,22 @@ def send_poll_quiz(message):
         message_thread_id=THREAD_ID
     )
 
-    for i, q in enumerate(poll_questions, start=1):
+    for i, q in enumerate(batch, start=1):
 
         message_text = f"🧠 <b>Question {i}</b>\n\n"
         message_text += f"{q['question']}\n\n"
 
         if "code" in q:
-            message_text += (
-                f"<pre>{safe_html(q['code'])}</pre>\n\n"
-            )
+            message_text += f"<pre>{safe_html(q['code'])}</pre>\n\n"
 
         message_text += "👇 <b>Vote in the poll below.</b>"
 
         question_message = bot.send_message(
-    chat_id=CHANNEL_ID,
-    message_thread_id=THREAD_ID,
-    text=message_text,
-    parse_mode="HTML"
-)
+            chat_id=CHANNEL_ID,
+            message_thread_id=THREAD_ID,
+            text=message_text,
+            parse_mode="HTML"
+        )
 
         sent_poll = bot.send_poll(
             chat_id=CHANNEL_ID,
@@ -449,25 +474,23 @@ def send_poll_quiz(message):
 
         poll_correct_answers[sent_poll.poll.id] = q["correct"]
 
-        # save poll message id
-      # save in memory
-     # save in memory
         poll_message_ids[sent_poll.poll.id] = sent_poll.message_id
         quiz_text_message_ids[sent_poll.poll.id] = question_message.message_id
 
-
-# save permanently in MongoDB
         poll_delete_col.insert_one({
-        "poll_id": sent_poll.poll.id,
-        "poll_message_id": sent_poll.message_id,
-        "text_message_id": question_message.message_id,
-        "chat_id": CHANNEL_ID,
-        "thread_id": THREAD_ID
-         })
+            "poll_id": sent_poll.poll.id,
+            "poll_message_id": sent_poll.message_id,
+            "text_message_id": question_message.message_id,
+            "chat_id": CHANNEL_ID,
+            "thread_id": THREAD_ID
+        })
+
+    # save progress for next run
+    set_poll_index(next_index)
 
     bot.reply_to(
         message,
-        "✅ Poll quiz sent successfully!"
+        f"✅ Sent questions {start_index+1}–{start_index+len(batch)} (of {len(poll_questions)})"
     )
 
 @bot.message_handler(commands=['deletepoll'])

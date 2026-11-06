@@ -441,7 +441,7 @@ def send_poll_quiz(message):
 
     bot.send_message(
         chat_id=CHANNEL_ID,
-        text="🧑‍💻 JavaScript Weekly Quiz Challenge 🚀",
+        text="🧑‍💻 HTML Weekly Quiz Challenge 🚀",
         message_thread_id=THREAD_ID
     )
 

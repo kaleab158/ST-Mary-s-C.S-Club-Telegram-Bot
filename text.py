@@ -447,7 +447,7 @@ def send_poll_quiz(message):
 
     for i, q in enumerate(batch, start=1):
 
-        message_text = f"🧠 <b>Question {i}</b>\n\n"
+        message_text = f"🧠 <b>Question {i}</b>\n\n{safe_html(q['question'])}\n\n"
         message_text += f"{q['question']}\n\n"
 
         if "code" in q:

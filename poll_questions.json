@@ -1,37 +1,37 @@
 [
   {
-    "question": "How is this rendered in the browser?",
+    "question": "How many lines does this content appear on in the browser?",
     "language": "html",
-    "code": "<p>Hello      World</p>",
+    "code": "<span>One</span><span>Two</span>\n<div>Three</div>",
     "options": [
-      "Hello      World (all spaces preserved)",
-      "HelloWorld",
-      "Hello World",
-      "Hello<br>World"
-    ],
-    "correct": 2
-  },
-  {
-    "question": "What happens when the user clicks the text \"Email\"?",
-    "language": "html",
-    "code": "<label for=\"email\">Email</label>\n<input id=\"email\" type=\"text\">",
-    "options": [
-      "Nothing happens",
-      "The input receives focus",
-      "The form is submitted",
-      "The input is cleared"
+      "1",
+      "2",
+      "3",
+      "4"
     ],
     "correct": 1
   },
   {
-    "question": "Is the checkbox checked?",
+    "question": "What value is submitted for \"color\" if the user leaves Red selected?",
     "language": "html",
-    "code": "<input type=\"checkbox\" checked=\"false\">",
+    "code": "<select name=\"color\">\n  <option>Red</option>\n  <option value=\"g\">Green</option>\n</select>",
     "options": [
-      "No, because the value is \"false\"",
-      "Yes, because the checked attribute is present",
-      "It causes a syntax error",
-      "It depends on the browser"
+      "color=red",
+      "color=Red",
+      "color=",
+      "Nothing is sent"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "What happens when the user clicks this button?",
+    "language": "html",
+    "code": "<button disabled onclick=\"alert('Hi')\">Click</button>",
+    "options": [
+      "An alert shows \"Hi\"",
+      "Nothing happens",
+      "The page reloads",
+      "A console error is thrown"
     ],
     "correct": 1
   },

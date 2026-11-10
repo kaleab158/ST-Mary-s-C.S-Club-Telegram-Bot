@@ -1,65 +1,5 @@
 [
   {
-    "question": "How many lines does this content appear on in the browser?",
-    "language": "html",
-    "code": "<span>One</span><span>Two</span>\n<div>Three</div>",
-    "options": [
-      "1",
-      "2",
-      "3",
-      "4"
-    ],
-    "correct": 1
-  },
-  {
-    "question": "What value is submitted for \"color\" if the user leaves Red selected?",
-    "language": "html",
-    "code": "<select name=\"color\">\n  <option>Red</option>\n  <option value=\"g\">Green</option>\n</select>",
-    "options": [
-      "color=red",
-      "color=Red",
-      "color=",
-      "Nothing is sent"
-    ],
-    "correct": 1
-  },
-  {
-    "question": "What happens when the user clicks this button?",
-    "language": "html",
-    "code": "<button disabled onclick=\"alert('Hi')\">Click</button>",
-    "options": [
-      "An alert shows \"Hi\"",
-      "Nothing happens",
-      "The page reloads",
-      "A console error is thrown"
-    ],
-    "correct": 1
-  },
-  {
-    "question": "How many direct child elements does <body> have after the browser parses this?",
-    "language": "html",
-    "code": "<body>\n  <p>Hi<div>There</div></p>\n</body>",
-    "options": [
-      "1",
-      "2",
-      "3",
-      "0"
-    ],
-    "correct": 2
-  },
-  {
-    "question": "What happens when the button is clicked?",
-    "language": "html",
-    "code": "<form action=\"/save\">\n  <button>Click</button>\n</form>",
-    "options": [
-      "Nothing, because there is no type attribute",
-      "The form is reset",
-      "The form is submitted",
-      "A JavaScript error is thrown"
-    ],
-    "correct": 2
-  },
-  {
     "question": "What is logged to the console?",
     "language": "html",
     "code": "<div id=\"box\">A</div>\n<div id=\"box\">B</div>\n<script>\n  console.log(document.getElementById('box').textContent);\n</script>",
@@ -94,29 +34,5 @@
       "undefined 0"
     ],
     "correct": 0
-  },
-  {
-    "question": "What does the browser do with this list?",
-    "language": "html",
-    "code": "<ul>\n  <li>One\n  <li>Two\n</ul>",
-    "options": [
-      "Renders one item containing \"One Two\"",
-      "Renders nothing because the </li> tags are missing",
-      "Renders two list items",
-      "Throws a parsing error"
-    ],
-    "correct": 2
-  },
-  {
-    "question": "Which statement about this page is true?",
-    "language": "html",
-    "code": "<html>\n  <body>\n    <h1>Hello</h1>\n  </body>\n</html>",
-    "options": [
-      "It is invalid and will not render",
-      "It renders in standards mode",
-      "It renders in quirks mode because there is no <!DOCTYPE html>",
-      "It renders in XML mode"
-    ],
-    "correct": 2
   }
 ]

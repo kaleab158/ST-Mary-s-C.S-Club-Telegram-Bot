@@ -1,38 +1,38 @@
 [
   {
-    "question": "What is logged to the console?",
+    "question": "What is logged to the console when the input's validity is checked?",
     "language": "html",
-    "code": "<div id=\"box\">A</div>\n<div id=\"box\">B</div>\n<script>\n  console.log(document.getElementById('box').textContent);\n</script>",
+    "code": "<form>\n  <input type=\"text\" required minlength=\"5\" value=\"abc\">\n</form>\n<script>\n  const input = document.querySelector('input');\n  console.log(input.checkValidity());\n</script>",
     "options": [
-      "'B'",
-      "'AB'",
-      "null",
-      "'A'"
-    ],
-    "correct": 3
-  },
-  {
-    "question": "Which fields are sent when the form is submitted?",
-    "language": "html",
-    "code": "<form>\n  <input name=\"a\" value=\"1\" disabled>\n  <input name=\"b\" value=\"2\" readonly>\n  <button>Send</button>\n</form>",
-    "options": [
-      "a=1&b=2",
-      "b=2",
-      "a=1",
-      "Neither field is sent"
+      "true",
+      "false",
+      "undefined",
+      "\"abc\""
     ],
     "correct": 1
   },
   {
-    "question": "What is logged?",
+    "question": "What tag name is logged when the span element inside the div is clicked?",
     "language": "html",
-    "code": "<div class=\"a\"></div>\n<div class=\"a\"></div>\n<script>\n  console.log(document.querySelectorAll('.a').length);\n  console.log(document.getElementsByClassName('b').length);\n</script>",
+    "code": "<div onclick=\"console.log(event.target.tagName)\">\n  <span>Click me</span>\n</div>",
     "options": [
-      "2 0",
-      "2 null",
-      "2 undefined",
-      "undefined 0"
+      "\"DIV\"",
+      "\"SPAN\"",
+      "\"BODY\"",
+      "\"UNDEFINED\""
     ],
-    "correct": 0
+    "correct": 1
+  },
+  {
+    "question": "How does the browser render the content inside the div after the script runs?",
+    "language": "html",
+    "code": "<div id=\"content\"></div>\n<script>\n  document.getElementById('content').innerHTML = '<span>Safe</span>';\n</script>",
+    "options": [
+      "As raw text including the HTML tags",
+      "As an active HTML span element",
+      "As an empty string",
+      "It throws a security error"
+    ],
+    "correct": 1
   }
 ]

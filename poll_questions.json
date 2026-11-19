@@ -1,37 +1,37 @@
 [
   {
-    "question": "What is logged to the console when the input's validity is checked?",
+    "question": "What color is the paragraph text when rendered?",
     "language": "html",
-    "code": "<form>\n  <input type=\"text\" required minlength=\"5\" value=\"abc\">\n</form>\n<script>\n  const input = document.querySelector('input');\n  console.log(input.checkValidity());\n</script>",
+    "code": "<style>\n  p { color: blue; }\n  .note { color: green; }\n  #msg { color: red; }\n</style>\n<p id=\"msg\" class=\"note\">Hello</p>",
     "options": [
-      "true",
-      "false",
-      "undefined",
-      "\"abc\""
+      "Blue",
+      "Green",
+      "Red",
+      "Black"
     ],
-    "correct": 1
+    "correct": 2
   },
   {
-    "question": "What tag name is logged when the span element inside the div is clicked?",
+    "question": "What is the total rendered width of the box, including padding and border?",
     "language": "html",
-    "code": "<div onclick=\"console.log(event.target.tagName)\">\n  <span>Click me</span>\n</div>",
+    "code": "<style>\n  .box {\n    width: 200px;\n    padding: 20px;\n    border: 5px solid black;\n    box-sizing: content-box;\n  }\n</style>\n<div class=\"box\">Box</div>",
     "options": [
-      "\"DIV\"",
-      "\"SPAN\"",
-      "\"BODY\"",
-      "\"UNDEFINED\""
+      "200px",
+      "225px",
+      "250px",
+      "260px"
     ],
-    "correct": 1
+    "correct": 3
   },
   {
-    "question": "How does the browser render the content inside the div after the script runs?",
+    "question": "Where is the child element positioned when the page loads?",
     "language": "html",
-    "code": "<div id=\"content\"></div>\n<script>\n  document.getElementById('content').innerHTML = '<span>Safe</span>';\n</script>",
+    "code": "<style>\n  .parent { position: relative; width: 300px; height: 300px; }\n  .child { position: absolute; top: 0; right: 0; width: 50px; height: 50px; }\n</style>\n<div class=\"parent\">\n  <div class=\"child\"></div>\n</div>",
     "options": [
-      "As raw text including the HTML tags",
-      "As an active HTML span element",
-      "As an empty string",
-      "It throws a security error"
+      "Top-left corner of the page",
+      "Top-right corner of the parent",
+      "Top-right corner of the page",
+      "Bottom-right corner of the parent"
     ],
     "correct": 1
   }

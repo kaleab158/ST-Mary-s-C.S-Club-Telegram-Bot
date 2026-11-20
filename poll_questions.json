@@ -2,37 +2,37 @@
   {
     "question": "What color is the paragraph text when rendered?",
     "language": "html",
-    "code": "<style>\n  p { color: blue; }\n  .note { color: green; }\n  #msg { color: red; }\n</style>\n<p id=\"msg\" class=\"note\">Hello</p>",
+    "code": "<style>\n  p { color: blue !important; }\n  .note { color: green; }\n  #msg { color: red; }\n</style>\n<p id=\"msg\" class=\"note\">Hello</p>",
     "options": [
       "Blue",
       "Green",
       "Red",
       "Black"
     ],
-    "correct": 2
+    "correct": 0
   },
   {
-    "question": "What is the total rendered width of the box, including padding and border?",
+    "question": "What is the final background color of the div?",
     "language": "html",
-    "code": "<style>\n  .box {\n    width: 200px;\n    padding: 20px;\n    border: 5px solid black;\n    box-sizing: content-box;\n  }\n</style>\n<div class=\"box\">Box</div>",
+    "code": "<style>\n  div { background-color: yellow; }\n  div { background-color: orange; }\n</style>\n<div>Box</div>",
     "options": [
-      "200px",
-      "225px",
-      "250px",
-      "260px"
-    ],
-    "correct": 3
-  },
-  {
-    "question": "Where is the child element positioned when the page loads?",
-    "language": "html",
-    "code": "<style>\n  .parent { position: relative; width: 300px; height: 300px; }\n  .child { position: absolute; top: 0; right: 0; width: 50px; height: 50px; }\n</style>\n<div class=\"parent\">\n  <div class=\"child\"></div>\n</div>",
-    "options": [
-      "Top-left corner of the page",
-      "Top-right corner of the parent",
-      "Top-right corner of the page",
-      "Bottom-right corner of the parent"
+      "Yellow",
+      "Orange",
+      "Both at once",
+      "No color (default)"
     ],
     "correct": 1
+  },
+  {
+    "question": "How many pixels tall is the element, including margin, when box-sizing is border-box?",
+    "language": "html",
+    "code": "<style>\n  .box {\n    height: 100px;\n    padding: 10px;\n    border: 5px solid black;\n    margin: 15px;\n    box-sizing: border-box;\n  }\n</style>\n<div class=\"box\">Box</div>",
+    "options": [
+      "100px",
+      "130px",
+      "145px",
+      "160px"
+    ],
+    "correct": 2
   }
 ]

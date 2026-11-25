@@ -1,38 +1,38 @@
 [
   {
-    "question": "What color is the text inside the span?",
+    "question": "What color is the paragraph text?",
     "language": "html",
-    "code": "<style>\n  div { color: red; }\n  span { color: blue; }\n</style>\n<div>\n  Hello <span>World</span>\n</div>",
+    "code": "<style>\n  .box p { color: red; }\n  p.text { color: green; }\n  p { color: blue !important; }\n</style>\n<div class=\"box\">\n  <p class=\"text\">Hello</p>\n</div>",
     "options": [
       "Red",
+      "Green",
       "Blue",
-      "Black",
-      "Purple"
+      "Black"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "What color is the paragraph text?",
+    "language": "html",
+    "code": "<style>\n  div p { color: red; }\n  .item { color: green; }\n</style>\n<div>\n  <p class=\"item\">Hello</p>\n</div>",
+    "options": [
+      "Red",
+      "Green",
+      "Blue",
+      "Black"
     ],
     "correct": 1
   },
   {
-    "question": "What does the console print?",
-    "language": "javascript",
-    "code": "let count = 0;\nfor (var i = 0; i < 3; i++) {\n  count += i;\n}\nconsole.log(count, i);",
-    "options": [
-      "3 3",
-      "3 2",
-      "6 3",
-      "ReferenceError"
-    ],
-    "correct": 0
-  },
-  {
-    "question": "What is the width of the element's content area?",
+    "question": "What color is the text inside the em element?",
     "language": "html",
-    "code": "<style>\n  .box {\n    width: 300px;\n    padding: 25px;\n    border: 10px solid black;\n    box-sizing: border-box;\n  }\n</style>\n<div class=\"box\">Box</div>",
+    "code": "<style>\n  body { color: blue; }\n  .card { color: green; }\n</style>\n<div class=\"card\">\n  <p>Welcome <em>back</em></p>\n</div>",
     "options": [
-      "300px",
-      "230px",
-      "260px",
-      "370px"
+      "Blue",
+      "Green",
+      "Black",
+      "Red"
     ],
     "correct": 1
   }
-]
+]s
